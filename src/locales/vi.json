@@ -1,0 +1,181 @@
+{
+	"ui": {
+		"settings": {
+			"title": "CÀI ĐẶT",
+			"general": "CHUNG",
+			"visuals": "HÌNH ẢNH",
+			"sensitivity": "ĐỘ NHẠY CẢM",
+			"controls": "ĐIỀU KHIỂN",
+			"progress": "TIẾN ĐỘ",
+			"language": "Ngôn ngữ",
+			"masterVolume": "Âm lượng chính",
+			"fullscreen": "Toàn màn hình",
+			"shadows": "Bóng",
+			"verticalSensitivity": "Độ nhạy cảm dọc",
+			"horizontalSensitivity": "Độ nhạy cảm ngang",
+			"move": "Di chuyển",
+			"interact": "Tương tác",
+			"listenCarefully": "Lắng nghe cẩn thận",
+			"crouch": "Cúi xuống",
+			"jump": "Nhảy",
+			"resetProgress": "Đặt lại tiến độ",
+			"reportBug": "Báo cáo lỗi",
+			"exitGame": "THOÁT TRẬN"
+		},
+		"bugReport": {
+			"title": "BÁO CÁO LỖI",
+			"description": "Vui lòng mô tả lỗi bạn gặp phải",
+			"placeholder": "Điều gì đã xảy ra? Bạn đang làm gì khi lỗi xảy ra? Bất kỳ chi tiết nào khác có thể giúp chúng tôi sửa nó?",
+			"submit": "Gửi báo cáo",
+			"submitting": "Đang gửi...",
+			"cancel": "Hủy",
+			"success": "Cảm ơn vì báo cáo của bạn! Chúng tôi sẽ xem xét nó.",
+			"submitError": "Không thể gửi báo cáo lỗi. Vui lòng thử lại."
+		},
+		"loading": {
+			"loading": "ĐANG TẢI",
+			"clickToStart": "NHẤP ĐỂ BẮTĐẦU",
+			"settings": "Cài đặt"
+		},
+		"tutorial": {
+			"toMove": "để di chuyển",
+			"toInteract": "để tương tác",
+			"toJump": "để nhảy",
+			"toCrouch": "để cúi xuống",
+			"toListenCarefully": "để lắng nghe cẩn thận",
+			"objectives": {
+				"enterTutorialRoom": "Vào phòng hướng dẫn",
+				"closeDoor": "Đóng cửa",
+				"listenBathroomDoor": "Lắng nghe ở cửa phòng tắm",
+				"hideBehindCurtains": "Ẩn sau những chiếc rèm phòng tắm",
+				"hideInsideDesk": "Ẩn trong bàn làm việc",
+				"checkNightstand": "Kiểm tra tủ đêm",
+				"closeNightstandDoor": "Đóng cửa tủ đêm"
+			}
+		},
+		"objectives": {
+			"findExit": "Tìm lối thoát",
+			"refillSoapBottles": "Làm đầy lại chai xà phòng",
+			"makeTheBed": "Dọn giường",
+			"openTheWindow": "Mở cửa sổ",
+			"clearLeftovers": "Dọn sạch thức ăn thừa",
+			"cleanBathroom": "Dọn phòng tắm"
+		},
+		"deathScreen": {
+			"youDied": "BẠN ĐÃ CHẾT",
+			"hidingSpotsFound": " nơi ẩn trú được tìm thấy",
+			"continue": "TIẾP TỤC",
+			"restarting": "Đang khởi động lại..."
+		},
+		"endGameScreen": {
+			"thankYouForPlaying": "CẢM ƠN BẠN ĐÃ CHƠI",
+			"yourTime": "Thời gian của bạn:",
+			"death": "cái chết",
+			"deaths": "những cái chết",
+			"enterYourName": "Nhập tên của bạn",
+			"signGuestBook": "Ký sách khách",
+			"saving": "Đang lưu...",
+			"submissionSuccess": "Bạn có thể xem mục nhập của mình trên bàn tiếp tân",
+			"playAgain": "CHƠI LẠI",
+			"restarting": "ĐANG KHỞI ĐỘNG LẠI...",
+			"nameValidation": {
+				"tooShort": "Tên phải có ít nhất {{min}} ký tự",
+				"tooLong": "Tên phải không quá {{max}} ký tự",
+				"invalidPattern": "Tên chỉ có thể chứa chữ cái, số, khoảng trắng và dấu câu cơ bản",
+				"submitError": "Không thể gửi mục nhập của bạn. Vui lòng thử lại."
+			}
+		},
+		"howItsMade": {
+			"title": "Nó được làm như thế nào",
+			"technologies": "CÔNG NGHỆ",
+			"people": "MỌI NGƯỜI",
+			"openSource": "Đây là một dự án mã nguồn mở. Kiểm tra",
+			"githubRepository": "kho lưu trữ GitHub",
+			"threejsDescription": "Thư viện JavaScript để tạo đồ họa 3D trong trình duyệt",
+			"createdBy": "Được tạo bởi",
+			"r3fDescription": "Một công cụ giúp sử dụng three.js với React dễ dàng hơn",
+			"threejsJourneyDescription": "Một khóa học trực tuyến để tìm hiểu về 3D cho web",
+			"gameConceptDesignDev": "Khái niệm trò chơi, thiết kế trò chơi và phát triển trò chơi",
+			"uiArtDirection": "Giao diện người dùng & Hướng dẫn nghệ thuật"
+		},
+		"reception": {
+			"guestBook": "Sách khách",
+			"informations": "Thông tin",
+			"guestBookSubtitle": "Hoàn thành trò chơi để đăng ký tên của bạn",
+			"searchPlaceholder": "Nhập số trang hoặc tìm kiếm tên",
+			"completionTime": "Thời gian hoàn thành",
+			"time": "Thời gian",
+			"deaths": "Số chết",
+			"date": "Ngày tháng"
+		},
+		"crossPromo": {
+			"title": "TỬ CÁC TÁC GIẢ CỦA SKULL HOTEL",
+			"description": "Cùng khái niệm, nâng lên tầm cao hơn. Co-op và bản đồ ngẫu nhiên mỗi lần chơi.",
+			"cta": "WISHLIST TRÊN STEAM",
+			"message": "Bạn thích Skull Hotel? Hãy thử Sly Apes, trò chơi tiếp theo của chúng tôi. Cùng khái niệm, nâng lên tầm cao hơn.",
+			"ctaSmall": "Thêm vào danh sách mong muốn"
+		},
+		"close": "Đóng"
+	},
+	"game": {
+		"dialogues": {
+			"locked": "Nó bị khóa.",
+			"welcomeBack": "Chào mừng bạn trở lại.",
+			"welcomeHousekeeper": "Chào mừng. Bạn chắc là người dọn phòng mới.",
+			"closeDoors": "Luôn đóng cửa phía sau bạn hoặc họ có thể vào trong khi bạn dọn phòng.",
+			"bathroomWarning": "Nếu bạn nghe thấy gì đó, đừng mở. Nhưng đừng dựa vào điều đó: họ có thể im lặng.",
+			"hideImmediately": "Nếu bạn nghe thấy tiếng gõ cửa hoặc nhận thấy TV hoặc radio tự bật lên, hãy ẩn.",
+			"checkRoom": "Kiểm tra toàn bộ phòng cẩn thận. Họ có thể ẩn ở bất cứ đâu.",
+			"spotWarning": "Nếu bạn nhìn thấy một trong số họ, nhanh chóng đóng cửa và rời khỏi phòng.",
+			"wellDone": "Làm tốt lắm! Bây giờ hãy dọn sạch 8 phòng để kết thúc ngày.",
+			"turnBack": "Hãy nhớ: nếu bạn nhìn thấy một trong số họ trong phòng, hãy quay lại ngay.",
+			"infested": "Nửa số phòng này bị lây nhiễm ngẫu nhiên. Tiến hành cẩn thận.",
+			"bathroomTasks": "Trong phòng tắm, các tác vụ khác nhau (vết bẩn, rác, nhện...). Một số khó phát hiện."
+		},
+		"deathReasons": {
+			"underBed": "Nó đang ẩn dưới giường.",
+			"underBedsheets": "Nó đang ẩn dưới giường.",
+			"bathroomVent": "Nó đang ẩn trong lỗ thông gió phòng tắm.",
+			"roomVent": "Nó đang ẩn trong lỗ thông gió.",
+			"bedBasket": "Nó đang ẩn trong giỏ giặt ở gần giường.",
+			"windowBasket": "Nó đang ẩn trong ngăn tủ TV (bên phải TV).",
+			"hideoutMirror": "Nó đang ẩn trong phản xạ của gương. Kiểm tra kỹ các phản xạ.",
+			"behindDoor": "Nó đang chờ đằng sau cửa. Luôn nhìn kỹ trước khi đóng.",
+			"footWindow": "Bàn chân của nó được nhìn thấy dưới rèm.",
+			"bathCeiling": "Nó đang ẩn trên trần nhà.",
+			"servingCart": "Nó đang ẩn trong xe đẩy phục vụ.",
+			"belowTV": "Nó đang ẩn dưới TV.",
+			"landmineMirror": "Nó đang ẩn trong gương.",
+			"nearWindow": "Nó đang ẩn bên cạnh sofa.",
+			"ceilingCornerCouch": "Nó ở trên trần nhà phía trên sofa.",
+			"behindCouch": "Nó đang ẩn phía sau sofa.",
+			"behindDesk": "Nó đang ẩn phía sau bàn.",
+			"insideDesk": "Nó đang ẩn dưới bàn.",
+			"ceilingCenter": "Nó đang ẩn trên trần nhà. Kiểm tra mọi nơi trước khi tiến lên.",
+			"openedDesk": "Nó đang ẩn trong bàn.",
+			"behindServingCart": "Nó đang ẩn phía sau xe đẩy phục vụ.",
+			"bathroomCorner": "Nó đang ẩn ở góc.",
+			"sonarBathroom": "Đừng mở cửa phòng tắm nếu bạn nghe thấy tiếng từ bên trong (nhấn chuột phải hoặc Y để lắng nghe).",
+			"claymoreBath": "Nhanh chóng đóng rèm lại trước khi nó lao ra tấn công bạn.",
+			"claymoreDesk": "Nhanh chóng đóng cửa bàn lại trước khi nó lao ra tấn công bạn.",
+			"claymoreNightstand": "Nhanh chóng đóng cửa tủ đêm lại trước khi nó lao ra tấn công bạn.",
+			"claymoreWindow": "Nhanh chóng đóng rèm lại trước khi nó lao ra tấn công bạn.",
+			"hunterLivingRoom": "Họ có thể lao ra từ nơi ẩn trú bất cứ lúc nào. Thoát nhanh và đóng cửa.",
+			"hunterCeilingLivingRoom": "Họ có thể lao ra từ nơi ẩn trú bất cứ lúc nào. Thoát nhanh và đóng cửa.",
+			"hunterNightstand": "Họ có thể lao ra từ nơi ẩn trú bất cứ lúc nào. Thoát nhanh và đóng cửa.",
+			"hunterWindow": "Họ có thể lao ra từ nơi ẩn trú bất cứ lúc nào. Thoát nhanh và đóng cửa.",
+			"firstHunter": "Họ có thể lao ra từ nơi ẩn trú bất cứ lúc nào. Thoát nhanh và đóng cửa.",
+			"raidBottles": "Nếu bạn nghe thấy tiếng gõ, hãy ẩn.",
+			"raidTV": "Nếu TV tự bật lên, hãy ẩn.",
+			"raidRadio": "N��u radio tự bật lên, hãy ẩn.",
+			"raidInscriptions": "Nếu bạn thấy các dòng chữ máu trên tường, hãy ẩn.",
+			"raidFood": "Nếu bạn nghe thấy tiếng gõ, hãy ẩn.",
+			"raidDoor": "Luôn đóng cửa trước khi dọn phòng.",
+			"claymoreChase": "Luôn kiểm tra tất cả các nơi ẩn trú trước khi dọn phòng."
+		},
+		"status": {
+			"thankYouForPlaying": "Cảm ơn bạn đã chơi",
+			"playAgain": "Chơi lại"
+		}
+	}
+}

@@ -1,0 +1,360 @@
+:root {
+	--animation-delay: 3.5s;
+}
+
+@keyframes fadeInBlack {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes logoReveal {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+@keyframes loadingAppear {
+	0% {
+		opacity: 0;
+	}
+	100% {
+		opacity: 1;
+	}
+}
+
+@keyframes blink {
+	0%,
+	100% {
+		opacity: 1;
+	}
+	50% {
+		opacity: 0;
+	}
+}
+
+.font-preload {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: #080807;
+	height: 100%;
+	width: 100%;
+}
+
+.loading-page {
+	/* animation: fadeInBlack 2s ease; */
+
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 4rem;
+	height: 100%;
+	width: 100%;
+	background: #080807;
+	color: #c1c1c1;
+	position: relative;
+	overflow: hidden;
+	cursor: auto;
+}
+
+@media (max-height: 700px) {
+	.loading-page {
+		gap: 2rem;
+	}
+}
+
+.border-decoration {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	pointer-events: none;
+}
+
+.border-decoration path {
+	stroke-dasharray: 1500;
+	stroke-dashoffset: 1500;
+	opacity: 0;
+	animation: drawLine 1.5s ease forwards 1s;
+}
+
+@keyframes drawLine {
+	to {
+		stroke-dashoffset: 0;
+		opacity: 1;
+	}
+}
+
+.loading-page .skull-hotel-logo {
+	padding-top: 2rem;
+	width: 18rem;
+	height: 18rem;
+	opacity: 0;
+	animation: logoReveal 1.5s cubic-bezier(0.34, 1.56, 0.64, 1)
+		var(--animation-delay) forwards;
+	z-index: 2;
+	position: relative;
+}
+
+@media (max-width: 900px) {
+	.loading-page .skull-hotel-logo {
+		width: 14rem;
+		height: 14rem;
+	}
+}
+
+.loading-page .title-container {
+	position: relative;
+	z-index: 2;
+	width: 36rem;
+	max-width: 90vw;
+	height: 4rem;
+	margin-top: 0.5rem;
+}
+
+.loading-page .flex {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	z-index: 2;
+}
+
+.loading-page .loading,
+.loading-page .start {
+	bottom: 4rem;
+	opacity: 0;
+	animation: loadingAppear 1s ease var(--animation-delay) forwards;
+	z-index: 2;
+	color: #efd89b;
+	font-size: 2rem;
+	color: #fff;
+}
+
+.loading-page .start {
+	animation: loadingAppear 1s ease var(--animation-delay) forwards,
+		blink 2s ease-in-out calc(1s) infinite;
+	text-align: center;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.15rem;
+	font-size: 2rem;
+	color: #fff;
+}
+
+.loading-page .settings {
+	padding-bottom: 1rem;
+	bottom: 1rem;
+	opacity: 0;
+	animation: loadingAppear 1s ease calc(var(--animation-delay) + 0.2s) forwards;
+	z-index: 2;
+	color: #777d90;
+	font-size: 2rem;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.loading-page .settings:hover {
+	text-decoration: underline;
+	color: #9da5c0;
+}
+
+.ready {
+	cursor: pointer;
+}
+
+.triangle-patterns-container {
+	position: fixed;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 2;
+	pointer-events: none;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+@media (max-aspect-ratio: 1/1) {
+	.triangle-patterns-container {
+		left: -0.5rem;
+		width: 100dvh;
+		transform: rotate(90deg);
+		align-items: flex-end;
+	}
+}
+
+.column {
+	display: flex;
+	flex-direction: column;
+	gap: 0.75rem;
+}
+
+@media (max-width: 950px) {
+	.column {
+		gap: 0.375rem;
+	}
+}
+
+.buttons-container {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+}
+
+.cross-promo-link {
+	opacity: 0;
+	animation: loadingAppear 1s ease calc(var(--animation-delay) + 0.2s) forwards;
+	z-index: 2;
+	color: #777d90;
+	font-size: 0.9rem;
+	text-decoration: none;
+	text-align: center;
+	max-width: 500px;
+	line-height: 1.4;
+	cursor: pointer;
+	transition: all 0.2s ease;
+}
+
+.cross-promo-link:hover {
+	color: #9da5c0;
+}
+
+.cross-promo-link span {
+	color: #efd89b;
+	text-decoration: underline;
+}
+
+.cross-promo-link:hover span {
+	color: #fff;
+}
+
+/* Cross-promo popup */
+@keyframes promoFadeIn {
+	from {
+		opacity: 0;
+	}
+	to {
+		opacity: 1;
+	}
+}
+
+@keyframes promoSlideIn {
+	from {
+		opacity: 0;
+		transform: scale(0.9) translateY(20px);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1) translateY(0);
+	}
+}
+
+.cross-promo-overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: rgba(0, 0, 0, 0.7);
+	z-index: 100;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	animation: promoFadeIn 0.3s ease forwards;
+}
+
+.cross-promo-popup {
+	position: relative;
+	background: #0e0e0d;
+	border: 1px solid #efd89b;
+	padding: 2.5rem 3rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 1rem;
+	max-width: 420px;
+	width: 90%;
+	animation: promoSlideIn 0.4s ease forwards;
+}
+
+.cross-promo-close {
+	position: absolute;
+	top: 0.5rem;
+	right: 0.75rem;
+	background: none;
+	border: none;
+	color: #777d90;
+	font-size: 1.75rem;
+	cursor: pointer;
+	line-height: 1;
+	transition: color 0.2s ease;
+	padding: 0.25rem;
+}
+
+.cross-promo-close:hover {
+	color: #fff;
+}
+
+.cross-promo-header {
+	color: #777d90;
+	font-size: 0.85rem;
+	letter-spacing: 2px;
+	text-transform: uppercase;
+}
+
+.cross-promo-capsule {
+	width: 100%;
+	border-radius: 4px;
+}
+
+.cross-promo-description {
+	color: #c1c1c1;
+	font-size: 1.1rem;
+	text-align: center;
+	line-height: 1.4;
+}
+
+.cross-promo-cta {
+	display: inline-block;
+	margin-top: 0.5rem;
+	padding: 0.75rem 2rem;
+	background: #efd89b;
+	color: #080807;
+	font-size: 1rem;
+	font-weight: 600;
+	letter-spacing: 1px;
+	text-decoration: none;
+	transition: all 0.2s ease;
+	cursor: pointer;
+}
+
+.cross-promo-cta:hover {
+	background: #fff;
+}
+
+@media (max-width: 500px) {
+	.cross-promo-popup {
+		padding: 2rem 1.5rem;
+	}
+
+	.cross-promo-game-name {
+		font-size: 1.8rem;
+	}
+}
+
+.lincoln-regular {
+	font-family: 'Lincoln Road Regular', sans-serif;
+}

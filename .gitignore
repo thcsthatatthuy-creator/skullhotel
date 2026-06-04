@@ -1,0 +1,13 @@
+node_modules/
+/.pnp
+.pnp.js
+
+/build/
+/dist/
+
+/output/
+/steamcontent/
+
+.env
+
+500_first_bug_reports.md

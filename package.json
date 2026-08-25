@@ -19,6 +19,8 @@
 		"electron": "electron ."
 	},
 	"dependencies": {
+		"@capacitor/android": "^8.5.0",
+		"@capacitor/core": "^8.5.0",
 		"@gsap/react": "^2.1.2",
 		"@react-spring/three": "^10.0.3",
 		"@react-three/drei": "^9.122.0",
@@ -36,6 +38,7 @@
 		"zustand": "^5.0.8"
 	},
 	"devDependencies": {
+		"@capacitor/cli": "^8.5.0",
 		"@eslint/js": "^9.38.0",
 		"@vitejs/plugin-react": "^4.7.0",
 		"electron": "^39.0.0",

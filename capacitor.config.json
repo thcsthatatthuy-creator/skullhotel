@@ -1,0 +1,6 @@
+{
+  "appId": "com.thcsthatatthuy.skullhotel",
+  "appName": "skullhotel",
+  "webDir": "build",
+  "bundledWebRuntime": false
+}

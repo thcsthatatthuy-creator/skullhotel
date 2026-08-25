@@ -625,9 +625,9 @@ export default function Interface() {
 			const dx = touch.clientX - swipeTouchRef.current.lastX;
 			const dy = touch.clientY - swipeTouchRef.current.lastY;
 			
-			// Tăng tốc độ vuốt màn hình (độ nhạy x6)
-			cameraSwipeDeltaRef.current.x += dx * 6.0;
-			cameraSwipeDeltaRef.current.y += dy * 6.0;
+			// Tăng tốc độ vuốt màn hình (độ nhạy x15)
+			cameraSwipeDeltaRef.current.x += dx * 15.0;
+			cameraSwipeDeltaRef.current.y += dy * 15.0;
 			
 			swipeTouchRef.current.lastX = touch.clientX;
 			swipeTouchRef.current.lastY = touch.clientY;
@@ -1029,7 +1029,7 @@ export default function Interface() {
 								setCursor(null);
 							}}
 						>
-							<MdHearing />
+							<span className="moba-text-icon">Y</span>
 						</button>
 					</div>
 				</div>

@@ -181,6 +181,7 @@ const Joystick = ({ onMove, side }) => {
 	const joystickRef = useRef(null);
 
 	const handleStart = (e) => {
+		e.stopPropagation();
 		if (touchIdRef.current === null) {
 			const touch = e.changedTouches[0];
 			touchIdRef.current = touch.identifier;
@@ -190,6 +191,7 @@ const Joystick = ({ onMove, side }) => {
 	};
 
 	const handleMove = (e) => {
+		e.stopPropagation();
 		if (!active) return;
 
 		const touch = Array.from(e.changedTouches).find(
@@ -226,6 +228,7 @@ const Joystick = ({ onMove, side }) => {
 	};
 
 	const handleEnd = (e) => {
+		e.stopPropagation();
 		const touch = Array.from(e.changedTouches).find(
 			(t) => t.identifier === touchIdRef.current
 		);
@@ -576,8 +579,8 @@ export default function Interface() {
 	const isSwipingRef = useRef(false);
 
 	const handleMobileTouchStart = useCallback((e) => {
-		if (e.touches.length > 0) {
-			const touch = Array.from(e.touches).find(t => t.target.classList.contains('mobile-interface'));
+		if (e.changedTouches.length > 0) {
+			const touch = Array.from(e.changedTouches).find(t => t.target.classList.contains('mobile-interface'));
 			if (touch) {
 				swipeTouchRef.current = {
 					id: touch.identifier,
@@ -617,14 +620,14 @@ export default function Interface() {
 
 	const handleMobileTouchMove = useCallback((e) => {
 		if (!swipeTouchRef.current) return;
-		const touch = Array.from(e.touches).find(t => t.identifier === swipeTouchRef.current.id);
+		const touch = Array.from(e.changedTouches).find(t => t.identifier === swipeTouchRef.current.id);
 		if (touch) {
 			const dx = touch.clientX - swipeTouchRef.current.lastX;
 			const dy = touch.clientY - swipeTouchRef.current.lastY;
 			
-			// Tăng tốc độ vuốt màn hình (độ nhạy x3)
-			cameraSwipeDeltaRef.current.x += dx * 3.0;
-			cameraSwipeDeltaRef.current.y += dy * 3.0;
+			// Tăng tốc độ vuốt màn hình (độ nhạy x6)
+			cameraSwipeDeltaRef.current.x += dx * 6.0;
+			cameraSwipeDeltaRef.current.y += dy * 6.0;
 			
 			swipeTouchRef.current.lastX = touch.clientX;
 			swipeTouchRef.current.lastY = touch.clientY;

@@ -3,6 +3,7 @@ import { create } from 'zustand';
 const useJoysticksStore = create((set) => ({
 	leftStickRef: { current: null },
 	rightStickRef: { current: null },
+	cameraSwipeDeltaRef: { current: { x: 0, y: 0 } },
 	controls: {
 		left: false,
 		right: false,

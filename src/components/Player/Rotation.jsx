@@ -67,6 +67,7 @@ export default function Rotation({
 
 	const rightStickRef = useJoysticksStore((state) => state.rightStickRef);
 	const leftStickRef = useJoysticksStore((state) => state.leftStickRef);
+	const cameraSwipeDeltaRef = useJoysticksStore((state) => state.cameraSwipeDeltaRef);
 
 	const yaw = useRef(-Math.PI);
 	const pitch = useRef(0);
@@ -303,6 +304,7 @@ export default function Rotation({
 			const ROTATION_DEADZONE = 0.15;
 
 			if (isMobile) {
+				// Old joystick code (if they somehow still use right stick, but we removed it)
 				if (Math.abs(rightStickRef.current?.x) > ROTATION_DEADZONE) {
 					yaw.current -= applyRotationWithDelta(
 						rightStickRef.current.x,
@@ -311,7 +313,6 @@ export default function Rotation({
 						true
 					);
 				}
-
 				if (Math.abs(rightStickRef.current?.y) > ROTATION_DEADZONE) {
 					pitch.current -= applyRotationWithDelta(
 						rightStickRef.current.y,
@@ -319,6 +320,23 @@ export default function Rotation({
 						delta,
 						true
 					);
+				}
+
+				// New swipe camera logic
+				if (cameraSwipeDeltaRef.current) {
+					const dx = cameraSwipeDeltaRef.current.x;
+					const dy = cameraSwipeDeltaRef.current.y;
+					
+					if (Math.abs(dx) > 0.001) {
+						yaw.current -= dx * horizontalSensitivity * 0.002;
+					}
+					if (Math.abs(dy) > 0.001) {
+						pitch.current -= dy * verticalSensitivity * 0.002;
+					}
+					
+					// Consume the delta
+					cameraSwipeDeltaRef.current.x = 0;
+					cameraSwipeDeltaRef.current.y = 0;
 				}
 			} else if (deviceMode === 'gamepad' && isGameplayActive) {
 				if (Math.abs(gamepadControls.rightStickX) > ROTATION_DEADZONE) {

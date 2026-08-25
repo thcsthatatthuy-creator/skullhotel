@@ -1,0 +1,238 @@
+/* =============================================
+   INTRO DIALOGUE — GENSHIN-STYLE BOTTOM BAR
+   ============================================= */
+
+/* -- Backdrop: dim + blur the game behind -- */
+.intro-backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 199;
+	background: rgba(0, 0, 0, 0.45);
+	backdrop-filter: blur(3px);
+	-webkit-backdrop-filter: blur(3px);
+	animation: intro-fade-in 0.4s ease forwards;
+}
+
+.intro-backdrop.fading-out {
+	animation: intro-fade-out 0.5s ease forwards;
+}
+
+@keyframes intro-fade-in {
+	from { opacity: 0; }
+	to   { opacity: 1; }
+}
+@keyframes intro-fade-out {
+	from { opacity: 1; }
+	to   { opacity: 0; }
+}
+
+/* -- Bottom dialogue panel -- */
+.intro-panel {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 200;
+	padding: 0 clamp(1.5rem, 5vw, 5rem) 1.6rem;
+	animation: intro-slide-up 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+	pointer-events: auto;
+}
+
+.intro-panel.fading-out {
+	animation: intro-slide-down 0.45s ease forwards;
+}
+
+@keyframes intro-slide-up {
+	from { opacity: 0; transform: translateY(24px); }
+	to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes intro-slide-down {
+	from { opacity: 1; transform: translateY(0); }
+	to   { opacity: 0; transform: translateY(16px); }
+}
+
+/* -- Speaker name tab -- */
+.intro-name-tab {
+	display: inline-block;
+	background: linear-gradient(135deg, #1a1508ee, #0e0b04ee);
+	border: 1px solid #efd89b88;
+	border-bottom: none;
+	padding: 0.3rem 1.2rem 0.5rem;
+	margin-bottom: -1px;
+	position: relative;
+	z-index: 1;
+}
+
+.intro-name-tab span {
+	font-family: 'Lincoln Road Regular', sans-serif;
+	font-size: clamp(0.75rem, 1.5vw, 0.9rem);
+	letter-spacing: 3px;
+	text-transform: uppercase;
+	color: #efd89b;
+}
+
+/* -- Text box -- */
+.intro-textbox {
+	background: linear-gradient(180deg, #0e0b04f0 0%, #0a0804f8 100%);
+	border: 1px solid #efd89b66;
+	border-top: 1px solid #efd89b88;
+	padding: clamp(1rem, 2.5vw, 1.5rem) clamp(1.2rem, 3vw, 2rem);
+	display: flex;
+	flex-direction: column;
+	gap: 0.8rem;
+	min-height: 120px;
+	position: relative;
+	/* subtle inner glow */
+	box-shadow:
+		inset 0 1px 0 #efd89b22,
+		0 -4px 30px rgba(0,0,0,0.6);
+}
+
+/* top decorative line */
+.intro-textbox::before {
+	content: '';
+	position: absolute;
+	top: 0; left: 0; right: 0;
+	height: 1px;
+	background: linear-gradient(90deg, transparent, #efd89b88, transparent);
+}
+
+/* -- Dialogue text -- */
+.intro-dialogue-text {
+	font-family: 'Lincoln Road Regular', sans-serif;
+	font-size: clamp(0.95rem, 2vw, 1.1rem);
+	color: #e8d89a;
+	line-height: 1.75;
+	min-height: 2.8rem;
+	/* GPU-composited — no layout reflow on update */
+	will-change: contents;
+}
+
+/* blinking cursor */
+@keyframes cursor-blink {
+	0%, 100% { opacity: 1; }
+	50%       { opacity: 0; }
+}
+.intro-dialogue-text .cursor {
+	display: inline-block;
+	width: 2px;
+	height: 0.95em;
+	background: #efd89b;
+	margin-left: 2px;
+	vertical-align: middle;
+	animation: cursor-blink 0.75s step-end infinite;
+}
+
+/* -- Continue arrow (like Genshin's ▶ bounce) -- */
+@keyframes arrow-bounce {
+	0%, 100% { transform: translateX(0); }
+	50%       { transform: translateX(4px); }
+}
+.intro-arrow {
+	position: absolute;
+	right: clamp(1rem, 3vw, 2rem);
+	bottom: clamp(0.8rem, 1.5vw, 1.2rem);
+	color: #efd89b;
+	font-size: 0.85rem;
+	animation: arrow-bounce 1.2s ease-in-out infinite;
+	opacity: 0.85;
+}
+
+/* -- Keys hint (bottom-right corner) -- */
+.intro-keys-hint {
+	position: absolute;
+	right: clamp(1rem, 3vw, 2rem);
+	top: clamp(0.8rem, 1.5vw, 1.2rem);
+	display: flex;
+	gap: 1rem;
+	align-items: center;
+}
+
+.intro-key {
+	display: flex;
+	align-items: center;
+	gap: 0.3rem;
+	font-family: 'Lincoln Road Regular', sans-serif;
+	font-size: 0.7rem;
+	color: #efd89b66;
+	letter-spacing: 1px;
+}
+
+.intro-key kbd {
+	display: inline-block;
+	background: #1a150888;
+	border: 1px solid #efd89b44;
+	border-radius: 3px;
+	padding: 0.1rem 0.45rem;
+	font-family: monospace;
+	font-size: 0.7rem;
+	color: #efd89b99;
+}
+
+/* -- Options -- */
+.intro-options {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+	margin-top: 0.2rem;
+}
+
+@keyframes opt-in {
+	from { opacity: 0; transform: translateX(-6px); }
+	to   { opacity: 1; transform: translateX(0); }
+}
+
+.intro-option-btn {
+	background: none;
+	border: none;
+	border-left: 2px solid #efd89b44;
+	padding: 0.35rem 0.8rem;
+	color: #c9b87799;
+	font-family: 'Lincoln Road Regular', sans-serif;
+	font-size: clamp(0.82rem, 1.6vw, 0.95rem);
+	letter-spacing: 1px;
+	text-align: left;
+	cursor: pointer;
+	transition: color 0.15s, border-color 0.15s, background 0.15s;
+	animation: opt-in 0.25s ease both;
+}
+
+.intro-option-btn:nth-child(1) { animation-delay: 0.04s; }
+.intro-option-btn:nth-child(2) { animation-delay: 0.10s; }
+.intro-option-btn:nth-child(3) { animation-delay: 0.16s; }
+.intro-option-btn:nth-child(4) { animation-delay: 0.22s; }
+
+.intro-option-btn.focused,
+.intro-option-btn:hover {
+	color: #efd89b;
+	border-color: #efd89b;
+	background: #efd89b0d;
+}
+
+/* -- ESC skip -- */
+.intro-esc-hint {
+	position: fixed;
+	top: 1.2rem;
+	right: 1.8rem;
+	z-index: 201;
+	font-family: 'Lincoln Road Regular', sans-serif;
+	font-size: 0.72rem;
+	color: #efd89b55;
+	letter-spacing: 2px;
+	display: flex;
+	align-items: center;
+	gap: 0.4rem;
+	cursor: pointer;
+	transition: color 0.2s;
+	animation: intro-fade-in 0.6s ease 0.3s both;
+}
+
+.intro-esc-hint:hover { color: #efd89b; }
+
+.intro-esc-hint kbd {
+	border: 1px solid #efd89b44;
+	border-radius: 3px;
+	padding: 0.1rem 0.5rem;
+	font-size: 0.68rem;
+	color: #efd89b88;
+}

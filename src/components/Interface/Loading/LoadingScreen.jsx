@@ -283,59 +283,12 @@ const LoadingScreen = ({ onStart }) => {
 					>
 						{t('ui.loading.settings')}
 					</div>
-					{!popupShownThisSession.current && (
-						<a
-							className="cross-promo-link lincoln-regular"
-							href="https://store.steampowered.com/app/4506220/Sly_Apes/?utm_source=skull_hotel&utm_medium=main_menu&utm_campaign=cross_promo"
-							target="_blank"
-							rel="noopener noreferrer"
-							onClick={(e) => {
-								e.stopPropagation();
-								e.preventDefault();
-								openStoreLink(e.currentTarget.href);
-							}}
-						>
-							{t('ui.crossPromo.message')}{' '}
-							<span>{t('ui.crossPromo.ctaSmall')}</span>
-						</a>
-					)}
+
 				</div>
-				<div className="developer-credit lincoln-regular">
+			<div className="developer-credit lincoln-regular">
 					Game by Nhật Thiện
 				</div>
 			</div>
-			{showPromoPopup && (
-				<div className="cross-promo-overlay" onClick={handleClosePromo}>
-					<div className="cross-promo-popup" onClick={(e) => e.stopPropagation()}>
-						<button className="cross-promo-close" onClick={handleClosePromo}>&times;</button>
-						<div className="cross-promo-header lincoln-regular">
-							{t('ui.crossPromo.title')}
-						</div>
-						<img
-							className="cross-promo-capsule"
-							src="./sly_apes_capsule.webp"
-							alt="Sly Apes"
-							loading="eager"
-						/>
-						<div className="cross-promo-description lincoln-regular">
-							{t('ui.crossPromo.description')}
-						</div>
-						<a
-							className="cross-promo-cta lincoln-regular"
-							href="https://store.steampowered.com/app/4506220/Sly_Apes/?utm_source=skull_hotel&utm_medium=launch_popup&utm_campaign=cross_promo"
-							target="_blank"
-							rel="noopener noreferrer"
-							onClick={(e) => {
-								e.stopPropagation();
-								e.preventDefault();
-								openStoreLink(e.currentTarget.href);
-							}}
-						>
-							{t('ui.crossPromo.cta')}
-						</a>
-					</div>
-				</div>
-			)}
 		</>
 	);
 };

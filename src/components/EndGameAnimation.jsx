@@ -192,12 +192,6 @@ const EndGameAnimation = () => {
 
 		hasTriggeredAnimation.current = true;
 
-		setTimeout(() => {
-			if (window.steamAPI?.gameCompleted) {
-				window.steamAPI.gameCompleted();
-			}
-		}, 2000);
-
 		isLerpingToCamera.current = false;
 		shouldFade.current = false;
 		isFadingOut.current = false;

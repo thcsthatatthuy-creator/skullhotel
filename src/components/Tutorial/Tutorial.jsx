@@ -153,9 +153,6 @@ export default function Tutorial() {
 				timeoutRef.current = setTimeout(() => {
 					if (deaths === 0) {
 						setTutorialStage(TUTORIAL_STAGE.INTRO);
-						setTimeout(() => {
-							setCurrentDialogueIndex(WELCOME_DIALOGUE);
-						}, 2000);
 					}
 				}, 3000);
 			}

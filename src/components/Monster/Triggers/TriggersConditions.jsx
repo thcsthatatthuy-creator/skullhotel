@@ -60,6 +60,7 @@ export default function TriggersConditions({
 	const setCustomDeathMessage = useGame((state) => state.setCustomDeathMessage);
 	const knockedRooms = useGame((state) => state.knockedRooms);
 	const addKnockedRoom = useGame((state) => state.addKnockedRoom);
+	const isInvincible = useGame((state) => state.isInvincible);
 
 	// Interface
 	const interfaceObjectives = useInterface(
@@ -216,6 +217,7 @@ export default function TriggersConditions({
 	);
 
 	const monsterAttack = useCallback(() => {
+		if (useGame.getState().isInvincible) return;
 		setShakeIntensity(10);
 		setMonsterState('run');
 		playAnimation('Run');
@@ -241,9 +243,11 @@ export default function TriggersConditions({
 			setTemporaryDisableMouseLook(true);
 
 			setTimeout(() => {
-				setShakeIntensity(10);
-				setMonsterState('run');
-				playAnimation('Run');
+				if (!useGame.getState().isInvincible) {
+					setShakeIntensity(10);
+					setMonsterState('run');
+					playAnimation('Run');
+				}
 
 				lookAtTargetRef.current = null;
 				lookAtStartTimeRef.current = null;

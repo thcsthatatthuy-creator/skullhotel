@@ -86,6 +86,17 @@ const useInterfaceStore = create(
 			});
 		},
 
+		devFastClean: () => {
+			set((state) => {
+				const newObjectives = state.interfaceObjectives.map((subArray, index) =>
+					index < 8
+						? [true, true, true, true, true]
+						: subArray
+				);
+				return { interfaceObjectives: newObjectives };
+			});
+		},
+
 		customTutorialObjectives: null,
 		setCustomTutorialObjectives: (objectives) =>
 			set(() => ({ customTutorialObjectives: objectives })),

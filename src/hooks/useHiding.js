@@ -148,10 +148,7 @@ const useHiding = create(
 							currentRoom?.type === 'raid' || currentRoom?.isRaid;
 
 						if (!isRaidRoom) {
-							if (window.steamAPI && window.steamAPI.unnecessaryFear) {
-								window.steamAPI.unnecessaryFear();
-								set({ unnecessaryFearTriggered: true });
-							}
+							set({ unnecessaryFearTriggered: true });
 						}
 					}
 				}

@@ -116,16 +116,7 @@ const DeathScreen = () => {
 		}
 	}, [playerPositionRoom, seedData, addSeenLevel]);
 
-	useEffect(() => {
-		if (
-			seenLevels.size === Object.keys(levelData).length &&
-			totalLevelTypes === Object.keys(levelData).length
-		) {
-			if (window.steamAPI && window.steamAPI.allHideoutsFound) {
-				window.steamAPI.allHideoutsFound();
-			}
-		}
-	}, [seenLevels.size, totalLevelTypes]);
+
 
 	useEffect(() => {
 		if (openDeathScreen) {

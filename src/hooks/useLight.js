@@ -87,7 +87,7 @@ export default create(
 					color: '#ff0000',
 					intensity: 0,
 				},
-				flashlightEnabled: false,
+				flashlightEnabled: true,
 			}),
 	}))
 );

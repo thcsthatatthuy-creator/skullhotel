@@ -406,53 +406,69 @@
 	z-index: 100;
 }
 
-.mobile-buttons {
+.moba-action-group {
 	position: absolute;
-	display: flex;
-	flex-direction: column;
-	gap: 10px;
-	bottom: 140px;
-	width: 100px;
+	right: 5%;
+	bottom: 50px;
+	width: 150px;
+	height: 150px;
+	pointer-events: none;
 }
 
-.mobile-buttons.left {
-	left: 10%;
-}
-
-.mobile-buttons.right {
-	right: 10%;
-}
-
-.mobile-button {
-	width: 100%;
-	padding: 12px;
+.moba-btn {
+	position: absolute;
 	border: none;
-	border-radius: 0.5rem;
+	border-radius: 50%;
 	background-color: rgba(255, 255, 255, 0.2);
 	color: rgba(255, 255, 255, 0.8);
-	font-size: 14px;
-	line-height: 20px;
-	font-family: 'Lincoln Road', serif;
-	font-weight: 400;
-	font-size: 18px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	color: rgba(255, 255, 255, 0.8);
+	pointer-events: auto;
+	backdrop-filter: blur(2px);
 }
 
-.mobile-button svg {
-	width: 20px;
-	height: 20px;
+.moba-btn:active,
+.moba-btn.active {
+	background-color: rgba(255, 255, 255, 0.4);
+	transform: scale(0.95);
 }
 
-.mobile-button svg path {
+.moba-btn svg path {
 	fill: rgba(255, 255, 255, 0.8);
 }
 
-.mobile-button:active,
-.mobile-button.active {
-	background-color: rgba(255, 255, 255, 0.4);
+.moba-btn.jump-btn {
+	width: 80px;
+	height: 80px;
+	right: 0;
+	bottom: 0;
+}
+.moba-btn.jump-btn svg {
+	width: 40px;
+	height: 40px;
+}
+
+.moba-btn.crouch-btn {
+	width: 50px;
+	height: 50px;
+	right: 90px;
+	bottom: 10px;
+}
+.moba-btn.crouch-btn svg {
+	width: 25px;
+	height: 25px;
+}
+
+.moba-btn.listen-btn {
+	width: 50px;
+	height: 50px;
+	right: 30px;
+	bottom: 90px;
+}
+.moba-btn.listen-btn svg {
+	width: 25px;
+	height: 25px;
 }
 
 .fade-to-black {

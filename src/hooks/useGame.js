@@ -17,6 +17,12 @@ const useGameStore = create(
 		isGameplayActive: false,
 		setIsGameplayActive: (state) => set(() => ({ isGameplayActive: state })),
 
+		isDevMode: false,
+		setIsDevMode: (state) => set(() => ({ isDevMode: state })),
+
+		isInvincible: false,
+		setIsInvincible: (state) => set(() => ({ isInvincible: state })),
+
 		gameStartTime: Date.now(),
 		setGameStartTime: () => set({ gameStartTime: Date.now() }),
 

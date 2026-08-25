@@ -7,7 +7,7 @@
 	"description": "Skull Hotel Game",
 	"author": "Skull Hotel Team",
 	"scripts": {
-		"dev": "vite",
+		"dev": "vite --host",
 		"build": "vite build",
 		"build:electron": "vite build --config vite.config.electron.js",
 		"build:itch": "vite build --config vite.config.itch.js && node fix-paths.js",

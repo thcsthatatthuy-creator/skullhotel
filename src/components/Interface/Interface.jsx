@@ -7,6 +7,7 @@ import useGameplaySettings from '../../hooks/useGameplaySettings';
 import AnimatedObjectives from './AnimatedObjectives';
 import { TbXboxXFilled } from 'react-icons/tb';
 import { TbXboxYFilled } from 'react-icons/tb';
+import { MdHearing } from 'react-icons/md';
 import useDoor from '../../hooks/useDoor';
 import useMonster from '../../hooks/useMonster';
 import dialogues from './dialogues';
@@ -20,6 +21,8 @@ import EndGameScreen from './EndGameScreen/EndGameScreen';
 import GuestBook from './GuestBook/GuestBook';
 import HowItsMade from './HowItsMade/HowItsMade';
 import DeathScreen from './DeathScreen/DeathScreen';
+import IntroDialogue from './IntroDialogue/IntroDialogue';
+import AdminMenu from './AdminMenu';
 import './Interface.css';
 import { measurePerformance } from '../../hooks/usePerformance';
 import useTextureQueue from '../../hooks/useTextureQueue';
@@ -462,6 +465,12 @@ export default function Interface() {
 	const deviceMode = useGame((state) => state.deviceMode);
 	const isAnyPopupOpen = useInterface((state) => state.isAnyPopupOpen);
 	const isEndAnimationPlaying = useGame((state) => state.isEndAnimationPlaying);
+	const introIsPlaying = useGame((state) => state.introIsPlaying);
+
+	/* Show story dialogue once, right after the camera intro finishes */
+	const [showIntroDialogue, setShowIntroDialogue] = useState(false);
+	const introHasEndedRef  = useRef(false); // fire only once
+	const introHasStartedRef = useRef(false); // track that intro actually began
 
 	const setIsListening = useGame((state) => state.setIsListening);
 	const setCursor = useInterface((state) => state.setCursor);
@@ -495,6 +504,22 @@ export default function Interface() {
 	const [prevObjectiveText, setPrevObjectiveText] = useState(null);
 	const [showFindExit, setShowFindExit] = useState(false);
 	const prevDoneObjectives = useRef(0);
+
+	useEffect(() => {
+		if (loading) return; // still on loading screen
+
+		// Step 1: mark that the intro camera animation has started
+		if (introIsPlaying) {
+			introHasStartedRef.current = true;
+			return;
+		}
+
+		// Step 2: intro finished — show dialogue once, after 2s
+		if (introHasStartedRef.current && !introHasEndedRef.current) {
+			introHasEndedRef.current = true;
+			setTimeout(() => setShowIntroDialogue(true), 2000);
+		}
+	}, [loading, introIsPlaying]);
 
 	useEffect(() => {
 		const hasQueueChanged = Object.keys(queue).some((key) => {
@@ -542,6 +567,87 @@ export default function Interface() {
 
 	const handleRemove = useCallback((id) => {
 		setActiveDialogues((prev) => prev.filter((dialogue) => dialogue.id !== id));
+	}, []);
+
+	const swipeTouchRef = useRef(null);
+	const cameraSwipeDeltaRef = useJoysticks((state) => state.cameraSwipeDeltaRef);
+
+	const handleMobileTouchStart = useCallback((e) => {
+		if (e.touches.length > 0) {
+			const touch = Array.from(e.touches).find(t => t.target.classList.contains('mobile-interface'));
+			if (touch) {
+				swipeTouchRef.current = {
+					id: touch.identifier,
+					startX: touch.clientX,
+					startY: touch.clientY,
+					lastX: touch.clientX,
+					lastY: touch.clientY,
+					startTime: Date.now()
+				};
+			}
+		}
+	}, []);
+
+	const handleMobileTouchMove = useCallback((e) => {
+		if (!swipeTouchRef.current) return;
+		const touch = Array.from(e.touches).find(t => t.identifier === swipeTouchRef.current.id);
+		if (touch) {
+			const dx = touch.clientX - swipeTouchRef.current.lastX;
+			const dy = touch.clientY - swipeTouchRef.current.lastY;
+			
+			cameraSwipeDeltaRef.current.x += dx;
+			cameraSwipeDeltaRef.current.y += dy;
+			
+			swipeTouchRef.current.lastX = touch.clientX;
+			swipeTouchRef.current.lastY = touch.clientY;
+		}
+	}, [cameraSwipeDeltaRef]);
+
+	const handleMobileTouchEnd = useCallback((e) => {
+		if (!swipeTouchRef.current) return;
+		
+		const touch = Array.from(e.changedTouches).find(t => t.identifier === swipeTouchRef.current.id);
+		if (touch || e.touches.length === 0) {
+			const duration = Date.now() - swipeTouchRef.current.startTime;
+			const totalDx = Math.abs(swipeTouchRef.current.lastX - swipeTouchRef.current.startX);
+			const totalDy = Math.abs(swipeTouchRef.current.lastY - swipeTouchRef.current.startY);
+			
+			// If tap (short duration, little movement)
+			if (duration < 250 && totalDx < 10 && totalDy < 10) {
+				// Fake a click at the center of the screen for interaction
+				const pointerEvent = new PointerEvent('pointerdown', {
+					bubbles: true, cancelable: true, pointerType: 'touch', button: 0,
+					clientX: window.innerWidth / 2, clientY: window.innerHeight / 2,
+				});
+				window.dispatchEvent(pointerEvent);
+				
+				const clickEvent = new MouseEvent('click', {
+					bubbles: true, cancelable: true, view: window,
+					clientX: window.innerWidth / 2, clientY: window.innerHeight / 2,
+				});
+				window.dispatchEvent(clickEvent);
+				setMobileClick(true);
+				
+				setTimeout(() => {
+					const cursor = useInterface.getState().cursor;
+					if (cursor?.includes('clean')) {
+						const event = new CustomEvent('startProgress');
+						document.dispatchEvent(event);
+					}
+				}, 50);
+
+				setTimeout(() => {
+					const pointerEventUp = new PointerEvent('pointerup', {
+						bubbles: true, cancelable: true, pointerType: 'touch', button: 0,
+						clientX: window.innerWidth / 2, clientY: window.innerHeight / 2,
+					});
+					window.dispatchEvent(pointerEventUp);
+					setReleaseMobileClick(true);
+				}, 100);
+			}
+			
+			swipeTouchRef.current = null;
+		}
 	}, []);
 
 	const handleJoystickMove = useCallback(
@@ -807,91 +913,28 @@ export default function Interface() {
 			{!loading && isMobile && !isEndAnimationPlaying && (
 				<div
 					className="mobile-interface"
+					onTouchStart={handleMobileTouchStart}
+					onTouchMove={handleMobileTouchMove}
+					onTouchEnd={handleMobileTouchEnd}
+					onTouchCancel={handleMobileTouchEnd}
 					onPointerDown={(e) => e.stopPropagation()}
 					onPointerUp={(e) => e.stopPropagation()}
 					onClick={(e) => e.stopPropagation()}
 				>
-					<div className="mobile-buttons left">
-						<button
-							className={`mobile-button top ${
-								activeButtons.rightClick ? 'active' : ''
-							}`}
-							onTouchStart={() => {
-								setActiveButtons((prev) => ({ ...prev, rightClick: true }));
-								setIsListening(true);
-								setCursor('listening');
-							}}
-							onTouchEnd={() => {
-								setActiveButtons((prev) => ({ ...prev, rightClick: false }));
-								setIsListening(false);
-								setCursor(null);
-							}}
-						>
-							<TbXboxYFilled />
-						</button>
-						<button
-							className={`mobile-button bottom ${
-								activeButtons.leftClick ? 'active' : ''
-							}`}
-							onTouchStart={() => {
-								setActiveButtons((prev) => ({ ...prev, leftClick: true }));
-								const pointerEvent = new PointerEvent('pointerdown', {
-									bubbles: true,
-									cancelable: true,
-									pointerType: 'touch',
-									button: 0,
-									clientX: window.innerWidth / 2,
-									clientY: window.innerHeight / 2,
-								});
-								window.dispatchEvent(pointerEvent);
-								const clickEvent = new MouseEvent('click', {
-									bubbles: true,
-									cancelable: true,
-									view: window,
-									clientX: window.innerWidth / 2,
-									clientY: window.innerHeight / 2,
-								});
-								window.dispatchEvent(clickEvent);
-								setMobileClick(true);
+					<Joystick onMove={handleJoystickMove} side="left" />
 
-								setTimeout(() => {
-									const cursor = useInterface.getState().cursor;
-									if (cursor?.includes('clean')) {
-										const event = new CustomEvent('startProgress');
-										document.dispatchEvent(event);
-									}
-								}, 50);
-							}}
-							onTouchEnd={() => {
-								setActiveButtons((prev) => ({ ...prev, leftClick: false }));
-								setTimeout(() => {
-									const pointerEvent = new PointerEvent('pointerup', {
-										bubbles: true,
-										cancelable: true,
-										pointerType: 'touch',
-										button: 0,
-										clientX: window.innerWidth / 2,
-										clientY: window.innerHeight / 2,
-									});
-									window.dispatchEvent(pointerEvent);
-									setReleaseMobileClick(true);
-								}, 50);
-							}}
-						>
-							<TbXboxXFilled />
-						</button>
-					</div>
-
-					<div className="mobile-buttons right">
+					<div className="moba-action-group">
 						<button
-							className={`mobile-button top ${
+							className={`moba-btn jump-btn ${
 								activeButtons.jump ? 'active' : ''
 							}`}
-							onTouchStart={() => {
+							onTouchStart={(e) => {
+								e.stopPropagation();
 								setActiveButtons((prev) => ({ ...prev, jump: true }));
 								setControl('jump', true);
 							}}
-							onTouchEnd={() => {
+							onTouchEnd={(e) => {
+								e.stopPropagation();
 								setActiveButtons((prev) => ({ ...prev, jump: false }));
 								setControl('jump', false);
 							}}
@@ -899,24 +942,42 @@ export default function Interface() {
 							<HiMiniArrowUpCircle />
 						</button>
 						<button
-							className={`mobile-button bottom ${
+							className={`moba-btn crouch-btn ${
 								activeButtons.crouch ? 'active' : ''
 							}`}
-							onTouchStart={() => {
+							onTouchStart={(e) => {
+								e.stopPropagation();
 								setActiveButtons((prev) => ({ ...prev, crouch: true }));
 								setControl('crouch', true);
 							}}
-							onTouchEnd={() => {
+							onTouchEnd={(e) => {
+								e.stopPropagation();
 								setActiveButtons((prev) => ({ ...prev, crouch: false }));
 								setControl('crouch', false);
 							}}
 						>
 							<HiMiniArrowDownCircle />
 						</button>
+						<button
+							className={`moba-btn listen-btn ${
+								activeButtons.rightClick ? 'active' : ''
+							}`}
+							onTouchStart={(e) => {
+								e.stopPropagation();
+								setActiveButtons((prev) => ({ ...prev, rightClick: true }));
+								setIsListening(true);
+								setCursor('listening');
+							}}
+							onTouchEnd={(e) => {
+								e.stopPropagation();
+								setActiveButtons((prev) => ({ ...prev, rightClick: false }));
+								setIsListening(false);
+								setCursor(null);
+							}}
+						>
+							<MdHearing />
+						</button>
 					</div>
-
-					<Joystick onMove={handleJoystickMove} side="left" />
-					<Joystick onMove={handleJoystickMove} side="right" />
 				</div>
 			)}
 			{!loading && !isSettingsOpen && (
@@ -936,6 +997,7 @@ export default function Interface() {
 					<Cursor />
 				</>
 			)}
+			<AdminMenu />
 			{end && (
 				<div
 					onClick={(e) => {
@@ -979,6 +1041,10 @@ export default function Interface() {
 			<DeathScreen />
 
 			<EndGameScreen />
+
+			{showIntroDialogue && (
+				<IntroDialogue onFinish={() => setShowIntroDialogue(false)} />
+			)}
 
 			<GuestBook />
 			<HowItsMade />

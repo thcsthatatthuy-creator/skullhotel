@@ -571,6 +571,9 @@ export default function Interface() {
 
 	const swipeTouchRef = useRef(null);
 	const cameraSwipeDeltaRef = useJoysticks((state) => state.cameraSwipeDeltaRef);
+	const interactionTimeoutRef = useRef(null);
+	const isInteractingRef = useRef(false);
+	const isSwipingRef = useRef(false);
 
 	const handleMobileTouchStart = useCallback((e) => {
 		if (e.touches.length > 0) {
@@ -584,6 +587,30 @@ export default function Interface() {
 					lastY: touch.clientY,
 					startTime: Date.now()
 				};
+				isSwipingRef.current = false;
+				isInteractingRef.current = false;
+
+				// Bắt đầu chờ giữ màn hình (Hold to interact)
+				interactionTimeoutRef.current = setTimeout(() => {
+					if (!isSwipingRef.current && swipeTouchRef.current) {
+						isInteractingRef.current = true;
+						
+						// Bắt đầu tương tác tại vị trí chạm (không phải giữa màn hình)
+						const tx = swipeTouchRef.current.lastX;
+						const ty = swipeTouchRef.current.lastY;
+						const pointerEvent = new PointerEvent('pointerdown', {
+							bubbles: true, cancelable: true, pointerType: 'touch', button: 0,
+							clientX: tx, clientY: ty,
+						});
+						window.dispatchEvent(pointerEvent);
+
+						// Gửi sự kiện dọn dẹp nếu có con trỏ clean
+						const cursor = useInterface.getState().cursor;
+						if (cursor?.includes('clean')) {
+							document.dispatchEvent(new CustomEvent('startProgress'));
+						}
+					}
+				}, 200); // Giữ 200ms để bắt đầu dọn dẹp
 			}
 		}
 	}, []);
@@ -595,55 +622,79 @@ export default function Interface() {
 			const dx = touch.clientX - swipeTouchRef.current.lastX;
 			const dy = touch.clientY - swipeTouchRef.current.lastY;
 			
-			cameraSwipeDeltaRef.current.x += dx;
-			cameraSwipeDeltaRef.current.y += dy;
+			// Tăng tốc độ vuốt màn hình (độ nhạy x3)
+			cameraSwipeDeltaRef.current.x += dx * 3.0;
+			cameraSwipeDeltaRef.current.y += dy * 3.0;
 			
 			swipeTouchRef.current.lastX = touch.clientX;
 			swipeTouchRef.current.lastY = touch.clientY;
+
+			// Nếu di chuyển tay quá nhiều thì hủy trạng thái giữ (Hold)
+			const totalDx = Math.abs(touch.clientX - swipeTouchRef.current.startX);
+			const totalDy = Math.abs(touch.clientY - swipeTouchRef.current.startY);
+			if (totalDx > 15 || totalDy > 15) {
+				isSwipingRef.current = true;
+				if (interactionTimeoutRef.current) {
+					clearTimeout(interactionTimeoutRef.current);
+					interactionTimeoutRef.current = null;
+				}
+				if (isInteractingRef.current) {
+					isInteractingRef.current = false;
+					const pointerUp = new PointerEvent('pointerup', {
+						bubbles: true, cancelable: true, pointerType: 'touch', button: 0,
+						clientX: touch.clientX, clientY: touch.clientY,
+					});
+					window.dispatchEvent(pointerUp);
+				}
+			}
 		}
 	}, [cameraSwipeDeltaRef]);
 
 	const handleMobileTouchEnd = useCallback((e) => {
+		if (interactionTimeoutRef.current) {
+			clearTimeout(interactionTimeoutRef.current);
+			interactionTimeoutRef.current = null;
+		}
+
 		if (!swipeTouchRef.current) return;
 		
 		const touch = Array.from(e.changedTouches).find(t => t.identifier === swipeTouchRef.current.id);
 		if (touch || e.touches.length === 0) {
-			const duration = Date.now() - swipeTouchRef.current.startTime;
-			const totalDx = Math.abs(swipeTouchRef.current.lastX - swipeTouchRef.current.startX);
-			const totalDy = Math.abs(swipeTouchRef.current.lastY - swipeTouchRef.current.startY);
-			
-			// If tap (short duration, little movement)
-			if (duration < 250 && totalDx < 10 && totalDy < 10) {
-				// Fake a click at the center of the screen for interaction
-				const pointerEvent = new PointerEvent('pointerdown', {
+			const tx = swipeTouchRef.current.lastX;
+			const ty = swipeTouchRef.current.lastY;
+
+			if (isInteractingRef.current) {
+				// Nhả tay sau khi giữ
+				isInteractingRef.current = false;
+				const pointerEventUp = new PointerEvent('pointerup', {
 					bubbles: true, cancelable: true, pointerType: 'touch', button: 0,
-					clientX: window.innerWidth / 2, clientY: window.innerHeight / 2,
+					clientX: tx, clientY: ty,
 				});
-				window.dispatchEvent(pointerEvent);
+				window.dispatchEvent(pointerEventUp);
+				setReleaseMobileClick(true);
+			} else if (!isSwipingRef.current) {
+				// Chỉ chạm nhanh (Tap) vào đúng vị trí
+				const pointerDown = new PointerEvent('pointerdown', {
+					bubbles: true, cancelable: true, pointerType: 'touch', button: 0,
+					clientX: tx, clientY: ty,
+				});
+				window.dispatchEvent(pointerDown);
 				
 				const clickEvent = new MouseEvent('click', {
 					bubbles: true, cancelable: true, view: window,
-					clientX: window.innerWidth / 2, clientY: window.innerHeight / 2,
+					clientX: tx, clientY: ty,
 				});
 				window.dispatchEvent(clickEvent);
 				setMobileClick(true);
 				
 				setTimeout(() => {
-					const cursor = useInterface.getState().cursor;
-					if (cursor?.includes('clean')) {
-						const event = new CustomEvent('startProgress');
-						document.dispatchEvent(event);
-					}
-				}, 50);
-
-				setTimeout(() => {
-					const pointerEventUp = new PointerEvent('pointerup', {
+					const pointerUp = new PointerEvent('pointerup', {
 						bubbles: true, cancelable: true, pointerType: 'touch', button: 0,
-						clientX: window.innerWidth / 2, clientY: window.innerHeight / 2,
+						clientX: tx, clientY: ty,
 					});
-					window.dispatchEvent(pointerEventUp);
+					window.dispatchEvent(pointerUp);
 					setReleaseMobileClick(true);
-				}, 100);
+				}, 50);
 			}
 			
 			swipeTouchRef.current = null;

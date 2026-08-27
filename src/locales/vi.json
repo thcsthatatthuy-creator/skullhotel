@@ -1,14 +1,19 @@
 {
 	"ui": {
 		"initialFlow": {
-			"languageTitle": "CHỌN NGÔN NGỮ",
-			"continue": "Tiếp tục",
-			"ambassador": "Đại sứ game kinh dị Việt Nam",
-			"unreal": "Tất cả các thông tin trong game đều không có thật.",
-			"warning": "Game có những cảnh giật mình, ghê rợn không dành cho người yếu tim.",
-			"rating": "Gắn mác 16+",
-			"agree": "Toi dong tinh",
-			"disagree": "Toi khong dong tinh",
+			"languageTitle": "Chọn ngôn ngữ",
+			"languageSubtitle": "Bạn có thể thay đổi bất cứ lúc nào",
+			"continue": "OK",
+			"disclaimerTitle": "DISCLAIMER",
+			"disclaimerIntro": "Bằng việc chơi game này, bạn sẽ trở thành <b>Đại sứ thiện chí game kinh dị Việt Nam</b>. Đây là một vinh dự <b>lớn lao</b> và cũng là một trọng trách nặng nề đối với sự phát triển của game kinh dị Việt Nam nói chung, nên bạn phải ghi nhớ những điều sau:",
+			"disclaimer1": "<b>1.</b> Game có chứa <b>một số nội dung và chủ đề nhạy cảm</b>, có thể gây ám ảnh hoặc khó chịu cho một số người chơi.",
+			"disclaimer2": "<b>2.</b> Cốt truyện được <b>truyền cảm hứng</b> từ các sự kiện có thật, nhưng đã được hư cấu hóa và kịch tính hóa hoàn toàn vì mục đích giải trí.",
+			"disclaimer3": "<b>3.</b> Game <b>không nhằm đến, không cổ vũ, và không miệt thị</b> bất kỳ cá nhân, tập thể hay tổ chức cụ thể nào, dù còn sống hay đã mất. Bất kỳ sự tương đồng nào với thực tế đều chỉ là ngẫu nhiên.",
+			"disclaimer4": "<b>4. Mọi</b> thông tin trong game đều không có thật. Tôi không khuyến khích trải nghiệm game này vào ban đêm, và sẽ <b>không chịu trách nhiệm</b> cho bất kỳ vấn đề phát sinh nào về sức khỏe của bạn sau khi chơi.",
+			"disclaimer5": "<b>5.</b> Game có các cảnh giật mình kinh dị nặng, <b>không khuyến cáo</b> dành cho người có tiền sử bệnh tim hoặc dễ hoảng sợ.",
+			"disclaimerOutro": "<b>Chúc bạn có một trải nghiệm khó quên và hoàn thành tốt trọng trách của một Đại sứ!</b>",
+			"agree": "Tôi dong tinh.",
+			"disclaimerDisagree": "Tôi không dong tinh.",
 			"alert": "Bạn phải đồng ý để tiếp tục"
 		},
 		"settings": {

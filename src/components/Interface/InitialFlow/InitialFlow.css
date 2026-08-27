@@ -23,84 +23,130 @@
 .initial-logo {
 	max-width: 600px;
 	width: 90%;
-	opacity: 1;
-	transition: opacity 0.5s ease;
+	opacity: 0;
+	animation: logoAnim 3s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
 }
 
-.initial-logo.fade-out {
-	opacity: 0;
+@keyframes logoAnim {
+	0% {
+		opacity: 0;
+		transform: scale(0.95);
+	}
+	20% {
+		opacity: 1;
+	}
+	80% {
+		opacity: 1;
+	}
+	100% {
+		opacity: 0;
+		transform: scale(1.02);
+	}
 }
 
 .language-selection {
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	gap: 2rem;
 }
 
 .language-selection h2 {
-	font-size: 1.5rem;
+	font-family: 'Lincoln Road Deco', serif;
+	font-size: 2rem;
 	letter-spacing: 2px;
-	font-weight: 300;
+	font-weight: normal;
+	margin-bottom: 0.5rem;
 }
 
-.language-list {
+.language-subtitle {
+	font-family: 'Lincoln Road Regular', serif;
+	font-size: 1.2rem;
+	color: #cccccc;
+	margin-bottom: 2.5rem;
+	margin-top: 0;
+}
+
+.language-dropdown-container {
+	position: relative;
+	width: 300px;
+	margin-bottom: 3rem;
+}
+
+.language-dropdown-selected {
+	width: 100%;
+	background: transparent;
+	border: 1px solid #ffffff;
+	color: #ffffff;
+	padding: 1rem 1.5rem;
+	font-size: 1.2rem;
+	font-family: 'Lincoln Road Regular', serif;
+	cursor: pointer;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	text-transform: uppercase;
+}
+
+.dropdown-arrow {
+	font-size: 0.8rem;
+	transition: transform 0.2s;
+}
+
+.dropdown-arrow.open {
+	transform: rotate(180deg);
+}
+
+.language-dropdown-list {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	width: 100%;
+	background: #111111;
+	border: 1px solid #ffffff;
+	border-top: none;
+	max-height: 200px;
+	overflow-y: auto;
+	z-index: 10;
 	display: flex;
 	flex-direction: column;
-	gap: 1rem;
-	width: 100%;
-	max-width: 300px;
-	max-height: 50vh;
-	overflow-y: auto;
-	overflow-x: hidden;
-	padding-right: 10px;
 	scrollbar-width: thin;
 	scrollbar-color: #ffffff #000000;
 }
 
-.language-list::-webkit-scrollbar {
+.language-dropdown-list::-webkit-scrollbar {
 	width: 6px;
 }
-
-.language-list::-webkit-scrollbar-track {
+.language-dropdown-list::-webkit-scrollbar-track {
 	background: #000000;
 }
-
-.language-list::-webkit-scrollbar-thumb {
+.language-dropdown-list::-webkit-scrollbar-thumb {
 	background: #ffffff;
-	border-radius: 3px;
 }
 
-.lang-btn {
+.lang-dropdown-item {
 	background: transparent;
-	border: 1px solid #ffffff55;
+	border: none;
 	color: #ffffff;
-	padding: 1rem 2rem;
-	font-size: 1.2rem;
+	padding: 1rem 1.5rem;
+	text-align: left;
+	font-size: 1.1rem;
+	font-family: 'Lincoln Road Regular', serif;
 	cursor: pointer;
-	transition: all 0.2s ease;
 	text-transform: uppercase;
-	letter-spacing: 2px;
+	transition: background 0.2s;
 }
 
-.lang-btn:hover {
-	background: #ffffff22;
-	border-color: #ffffff;
-}
-
-.lang-btn.active {
-	background: #ffffff;
-	color: #000000;
-	font-weight: bold;
+.lang-dropdown-item:hover, .lang-dropdown-item.active {
+	background: #333333;
 }
 
 .continue-btn {
-	margin-top: 1rem;
 	background: #ffffff;
 	color: #000000;
 	border: none;
-	padding: 0.8rem 2rem;
-	font-size: 1rem;
+	padding: 0.8rem 2.5rem;
+	font-size: 1.1rem;
+	font-family: 'Lincoln Road Regular', serif;
 	text-transform: uppercase;
 	letter-spacing: 1px;
 	cursor: pointer;
@@ -108,31 +154,54 @@
 }
 
 .continue-btn:hover {
-	background: #dddddd;
+	background: #cccccc;
+}
+
+.disclaimer-container {
+	align-items: flex-start;
+	padding-top: 5vh;
+	overflow-y: auto;
 }
 
 .disclaimer-content {
-	max-width: 800px;
+	max-width: 900px;
 	width: 90%;
-	text-align: center;
+	text-align: left;
 	display: flex;
 	flex-direction: column;
-	gap: 1.5rem;
+	gap: 1.2rem;
+	margin: 0 auto;
+	padding-bottom: 5vh;
+}
+
+.disclaimer-title {
+	font-family: 'Lincoln Road Deco', serif;
+	font-size: 2.5rem;
+	text-align: center;
+	margin-top: 0;
+	margin-bottom: 1.5rem;
+	letter-spacing: 2px;
+	font-weight: normal;
 }
 
 .disclaimer-content p {
-	font-size: 1.2rem;
-	line-height: 1.5;
+	font-family: 'Lincoln Road Regular', serif;
+	font-size: 1.15rem;
+	line-height: 1.6;
 	margin: 0;
 	color: #dddddd;
 }
 
-.disclaimer-content .rating-16 {
-	font-size: 2rem;
+.disclaimer-content b {
+	font-family: 'Lincoln Road Regular', serif;
 	font-weight: bold;
-	color: #ff3333;
-	margin-top: 1rem;
-	margin-bottom: 2rem;
+	color: #ffffff;
+}
+
+.disclaimer-outro {
+	text-align: center !important;
+	font-size: 1.3rem !important;
+	margin-top: 1rem !important;
 }
 
 .disclaimer-buttons {
@@ -144,15 +213,13 @@
 
 .disclaimer-buttons button {
 	background: transparent;
-	border: 2px solid #ffffff;
+	border: 1px solid #ffffff;
 	color: #ffffff;
-	padding: 1rem 2.5rem;
+	padding: 0.8rem 2.5rem;
 	font-size: 1.1rem;
+	font-family: 'Lincoln Road Regular', serif;
 	cursor: pointer;
 	transition: all 0.2s ease;
-	text-transform: uppercase;
-	font-weight: bold;
-	letter-spacing: 1px;
 }
 
 .disclaimer-buttons button:hover {

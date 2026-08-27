@@ -8,27 +8,17 @@ export default function InitialFlow({ onComplete }) {
 	const [logoFading, setLogoFading] = useState(false);
 	const { currentLanguage, setLanguage, t } = useLocalization();
 
+	const [langDropdownOpen, setLangDropdownOpen] = useState(false);
+
 	useEffect(() => {
 		if (step === 0) {
 			const timer1 = setTimeout(() => {
-				setLogoFading(true);
-			}, 2000); // Wait 2 seconds before fading out
-
-			const timer2 = setTimeout(() => {
 				setStep(1);
-			}, 2500); // 2s wait + 0.5s fade out
+			}, 3000); // Logo animation takes 3s total
 
-			return () => {
-				clearTimeout(timer1);
-				clearTimeout(timer2);
-			};
+			return () => clearTimeout(timer1);
 		}
 	}, [step]);
-
-	const handleLanguageSelect = (code) => {
-		setLanguage(code);
-		setStep(2);
-	};
 
 	const handleAgree = () => {
 		onComplete();
@@ -44,30 +34,48 @@ export default function InitialFlow({ onComplete }) {
 				<img
 					src="/logo.png"
 					alt="Skull Hotel Logo"
-					className={`initial-logo ${logoFading ? 'fade-out' : ''}`}
+					className="initial-logo"
 				/>
 			</div>
 		);
 	}
 
 	if (step === 1) {
+		const selectedLang = languages.find(l => l.code === currentLanguage) || languages[0];
+
 		return (
 			<div className="initial-flow-container black-bg">
 				<div className="language-selection">
 					<h2>{t('ui.initialFlow.languageTitle')}</h2>
-					<div className="language-list">
-						{languages.map((lang) => (
-							<button
-								key={lang.code}
-								className={`lang-btn ${
-									currentLanguage === lang.code ? 'active' : ''
-								}`}
-								onClick={() => handleLanguageSelect(lang.code)}
-							>
-								{lang.nativeName}
-							</button>
-						))}
+					<p className="language-subtitle">{t('ui.initialFlow.languageSubtitle')}</p>
+					
+					<div className="language-dropdown-container">
+						<button 
+							className="language-dropdown-selected"
+							onClick={() => setLangDropdownOpen(!langDropdownOpen)}
+						>
+							{selectedLang.nativeName}
+							<span className={`dropdown-arrow ${langDropdownOpen ? 'open' : ''}`}>▼</span>
+						</button>
+						
+						{langDropdownOpen && (
+							<div className="language-dropdown-list">
+								{languages.map((lang) => (
+									<button
+										key={lang.code}
+										className={`lang-dropdown-item ${currentLanguage === lang.code ? 'active' : ''}`}
+										onClick={() => {
+											setLanguage(lang.code);
+											setLangDropdownOpen(false);
+										}}
+									>
+										{lang.nativeName}
+									</button>
+								))}
+							</div>
+						)}
 					</div>
+
 					<button className="continue-btn" onClick={() => setStep(2)}>
 						{t('ui.initialFlow.continue')}
 					</button>
@@ -78,15 +86,22 @@ export default function InitialFlow({ onComplete }) {
 
 	if (step === 2) {
 		return (
-			<div className="initial-flow-container black-bg">
+			<div className="initial-flow-container black-bg disclaimer-container">
 				<div className="disclaimer-content">
-					<p>{t('ui.initialFlow.ambassador')}</p>
-					<p>{t('ui.initialFlow.unreal')}</p>
-					<p>{t('ui.initialFlow.warning')}</p>
-					<p className="rating-16">{t('ui.initialFlow.rating')}</p>
+					<h1 className="disclaimer-title">{t('ui.initialFlow.disclaimerTitle')}</h1>
+					
+					<p dangerouslySetInnerHTML={{ __html: t('ui.initialFlow.disclaimerIntro') }} />
+					<p dangerouslySetInnerHTML={{ __html: t('ui.initialFlow.disclaimer1') }} />
+					<p dangerouslySetInnerHTML={{ __html: t('ui.initialFlow.disclaimer2') }} />
+					<p dangerouslySetInnerHTML={{ __html: t('ui.initialFlow.disclaimer3') }} />
+					<p dangerouslySetInnerHTML={{ __html: t('ui.initialFlow.disclaimer4') }} />
+					<p dangerouslySetInnerHTML={{ __html: t('ui.initialFlow.disclaimer5') }} />
+					
+					<p className="disclaimer-outro" dangerouslySetInnerHTML={{ __html: t('ui.initialFlow.disclaimerOutro') }} />
+					
 					<div className="disclaimer-buttons">
 						<button onClick={handleAgree}>{t('ui.initialFlow.agree')}</button>
-						<button onClick={handleDisagree}>{t('ui.initialFlow.disagree')}</button>
+						<button onClick={handleDisagree}>{t('ui.initialFlow.disclaimerDisagree')}</button>
 					</div>
 				</div>
 			</div>

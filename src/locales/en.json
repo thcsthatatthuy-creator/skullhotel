@@ -1,14 +1,19 @@
 {
 	"ui": {
 		"initialFlow": {
-			"languageTitle": "SELECT LANGUAGE",
-			"continue": "Continue",
-			"ambassador": "Vietnam Horror Game Ambassador",
-			"unreal": "All information in the game is fictional.",
-			"warning": "The game contains jump scares and gruesome scenes, not for the faint of heart.",
-			"rating": "Rated 16+",
-			"agree": "I agree",
-			"disagree": "I disagree",
+			"languageTitle": "Select language",
+			"languageSubtitle": "You can change this at any time",
+			"continue": "OK",
+			"disclaimerTitle": "DISCLAIMER",
+			"disclaimerIntro": "By playing this game, you will become a <b>Goodwill Ambassador for Vietnam Horror Games</b>. This is a <b>great honor</b> and a heavy responsibility for the development of Vietnam horror games in general, so you must remember the following:",
+			"disclaimer1": "<b>1.</b> The game contains <b>some sensitive content and themes</b>, which may be disturbing or uncomfortable for some players.",
+			"disclaimer2": "<b>2.</b> The storyline is <b>inspired</b> by true events, but has been completely fictionalized and dramatized for entertainment purposes.",
+			"disclaimer3": "<b>3.</b> The game <b>does not target, promote, or disparage</b> any specific individual, group, or organization, living or dead. Any resemblance to reality is purely coincidental.",
+			"disclaimer4": "<b>4. All</b> information in the game is fictional. I do not recommend playing this game at night, and I will <b>not be held responsible</b> for any health issues that may arise after playing.",
+			"disclaimer5": "<b>5.</b> The game contains heavy horror jump scares, <b>not recommended</b> for people with a history of heart disease or faint of heart.",
+			"disclaimerOutro": "<b>Wishing you an unforgettable experience and successful fulfillment of your Ambassador duties!</b>",
+			"agree": "Tôi dong tinh.",
+			"disclaimerDisagree": "Tôi không dong tinh.",
 			"alert": "You must agree to continue"
 		},
 		"settings": {

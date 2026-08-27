@@ -109,25 +109,33 @@ export default function useLocalization() {
 
 	const t = useCallback(
 		(key, params = {}) => {
-			const translation = translations[currentLanguage];
+			const getTranslation = (langCode) => {
+				const translation = translations[langCode];
+				if (!translation) return null;
 
-			if (!translation) {
-				console.warn(`Translation not found for language: ${currentLanguage}`);
-				return key;
+				const keys = key.split('.');
+				let value = translation;
+
+				for (const k of keys) {
+					if (value && typeof value === 'object' && k in value) {
+						value = value[k];
+					} else {
+						return null;
+					}
+				}
+				return value;
+			};
+
+			let value = getTranslation(currentLanguage);
+
+			// Fallback to English if not found
+			if (!value && currentLanguage !== 'en') {
+				value = getTranslation('en');
 			}
 
-			const keys = key.split('.');
-			let value = translation;
-
-			for (const k of keys) {
-				if (value && typeof value === 'object' && k in value) {
-					value = value[k];
-				} else {
-					console.warn(
-						`Translation key not found: ${key} in ${currentLanguage}`
-					);
-					return key;
-				}
+			if (!value) {
+				console.warn(`Translation key not found: ${key}`);
+				return key;
 			}
 
 			if (typeof value === 'string' && Object.keys(params).length > 0) {

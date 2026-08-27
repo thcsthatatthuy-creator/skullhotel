@@ -1,5 +1,16 @@
 {
 	"ui": {
+		"initialFlow": {
+			"languageTitle": "CHỌN NGÔN NGỮ",
+			"continue": "Tiếp tục",
+			"ambassador": "Đại sứ game kinh dị Việt Nam",
+			"unreal": "Tất cả các thông tin trong game đều không có thật.",
+			"warning": "Game có những cảnh giật mình, ghê rợn không dành cho người yếu tim.",
+			"rating": "Gắn mác 16+",
+			"agree": "Toi dong tinh",
+			"disagree": "Toi khong dong tinh",
+			"alert": "Bạn phải đồng ý để tiếp tục"
+		},
 		"settings": {
 			"title": "CÀI ĐẶT",
 			"general": "CHUNG",

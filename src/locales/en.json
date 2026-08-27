@@ -1,5 +1,16 @@
 {
 	"ui": {
+		"initialFlow": {
+			"languageTitle": "SELECT LANGUAGE",
+			"continue": "Continue",
+			"ambassador": "Vietnam Horror Game Ambassador",
+			"unreal": "All information in the game is fictional.",
+			"warning": "The game contains jump scares and gruesome scenes, not for the faint of heart.",
+			"rating": "Rated 16+",
+			"agree": "I agree",
+			"disagree": "I disagree",
+			"alert": "You must agree to continue"
+		},
 		"settings": {
 			"title": "SETTINGS",
 			"general": "GENERAL",

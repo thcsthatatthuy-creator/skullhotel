@@ -21,8 +21,8 @@
 }
 
 .initial-logo {
-	max-width: 400px;
-	width: 80%;
+	max-width: 600px;
+	width: 90%;
 	opacity: 1;
 	transition: opacity 0.5s ease;
 }
@@ -50,6 +50,25 @@
 	gap: 1rem;
 	width: 100%;
 	max-width: 300px;
+	max-height: 50vh;
+	overflow-y: auto;
+	overflow-x: hidden;
+	padding-right: 10px;
+	scrollbar-width: thin;
+	scrollbar-color: #ffffff #000000;
+}
+
+.language-list::-webkit-scrollbar {
+	width: 6px;
+}
+
+.language-list::-webkit-scrollbar-track {
+	background: #000000;
+}
+
+.language-list::-webkit-scrollbar-thumb {
+	background: #ffffff;
+	border-radius: 3px;
 }
 
 .lang-btn {

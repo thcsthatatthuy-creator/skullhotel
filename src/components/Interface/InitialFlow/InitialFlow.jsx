@@ -12,11 +12,11 @@ export default function InitialFlow({ onComplete }) {
 		if (step === 0) {
 			const timer1 = setTimeout(() => {
 				setLogoFading(true);
-			}, 1000); // Wait 1 second before fading out
+			}, 2000); // Wait 2 seconds before fading out
 
 			const timer2 = setTimeout(() => {
 				setStep(1);
-			}, 1500); // 1s wait + 0.5s fade out
+			}, 2500); // 2s wait + 0.5s fade out
 
 			return () => {
 				clearTimeout(timer1);
@@ -35,7 +35,7 @@ export default function InitialFlow({ onComplete }) {
 	};
 
 	const handleDisagree = () => {
-		alert('Bạn phải đồng ý để tiếp tục / You must agree to continue');
+		alert(t('ui.initialFlow.alert'));
 	};
 
 	if (step === 0) {
@@ -54,7 +54,7 @@ export default function InitialFlow({ onComplete }) {
 		return (
 			<div className="initial-flow-container black-bg">
 				<div className="language-selection">
-					<h2>CHỌN NGÔN NGỮ / SELECT LANGUAGE</h2>
+					<h2>{t('ui.initialFlow.languageTitle')}</h2>
 					<div className="language-list">
 						{languages.map((lang) => (
 							<button
@@ -69,7 +69,7 @@ export default function InitialFlow({ onComplete }) {
 						))}
 					</div>
 					<button className="continue-btn" onClick={() => setStep(2)}>
-						Tiếp tục / Continue
+						{t('ui.initialFlow.continue')}
 					</button>
 				</div>
 			</div>
@@ -80,13 +80,13 @@ export default function InitialFlow({ onComplete }) {
 		return (
 			<div className="initial-flow-container black-bg">
 				<div className="disclaimer-content">
-					<p>Đại sứ game kinh dị Việt Nam</p>
-					<p>Tất cả các thông tin trong game đều không có thật.</p>
-					<p>Game có những cảnh giật mình, ghê rợn không dành cho người yếu tim.</p>
-					<p className="rating-16">Gắn mác 16+</p>
+					<p>{t('ui.initialFlow.ambassador')}</p>
+					<p>{t('ui.initialFlow.unreal')}</p>
+					<p>{t('ui.initialFlow.warning')}</p>
+					<p className="rating-16">{t('ui.initialFlow.rating')}</p>
 					<div className="disclaimer-buttons">
-						<button onClick={handleAgree}>Toi dong tinh</button>
-						<button onClick={handleDisagree}>Toi khong dong tinh</button>
+						<button onClick={handleAgree}>{t('ui.initialFlow.agree')}</button>
+						<button onClick={handleDisagree}>{t('ui.initialFlow.disagree')}</button>
 					</div>
 				</div>
 			</div>

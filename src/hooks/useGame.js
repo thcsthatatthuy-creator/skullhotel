@@ -6,6 +6,8 @@ import levelData from '../components/Monster/Triggers/levelData';
 
 const useGameStore = create(
 	subscribeWithSelector((set, get) => ({
+		hasSeenInitialFlow: false,
+		setHasSeenInitialFlow: (value) => set({ hasSeenInitialFlow: value }),
 		seedData: seed,
 		deaths: 0,
 		setDeaths: (state) => set(() => ({ deaths: state })),

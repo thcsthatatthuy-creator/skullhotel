@@ -23,12 +23,13 @@ import HowItsMade from './HowItsMade/HowItsMade';
 import DeathScreen from './DeathScreen/DeathScreen';
 import IntroDialogue from './IntroDialogue/IntroDialogue';
 import AdminMenu from './AdminMenu';
+import InitialFlow from './InitialFlow/InitialFlow';
 import './Interface.css';
 import { measurePerformance } from '../../hooks/usePerformance';
 import useTextureQueue from '../../hooks/useTextureQueue';
 import LoadingScreen from './Loading/LoadingScreen';
 import {
-	getKeyAudioPool,
+	playKeySound,
 	areSoundsLoaded,
 	preloadSounds,
 } from '../../utils/audio';
@@ -114,13 +115,9 @@ const Dialogue = memo(({ id, text, index, onRemove }) => {
 				if (textIndexRef.current < finalText.length) {
 					const currentChar = finalText[textIndexRef.current];
 
-					if (currentChar !== ' ' && keySoundsRef.current) {
+					if (currentChar !== ' ' && soundsReady) {
 						try {
-							const audio = keySoundsRef.current[currentAudioIndex.current];
-							audio.currentTime = 0;
-							audio.play().catch(console.warn);
-							currentAudioIndex.current =
-								(currentAudioIndex.current + 1) % keySoundsRef.current.length;
+							playKeySound();
 						} catch (error) {
 							console.warn('Audio playback failed:', error);
 						}
@@ -434,6 +431,8 @@ const AnimatedObjectiveItem = ({ objective, index }) => {
 
 export default function Interface() {
 	const { setIsLocked } = useGame();
+	const hasSeenInitialFlow = useGame((state) => state.hasSeenInitialFlow);
+	const setHasSeenInitialFlow = useGame((state) => state.setHasSeenInitialFlow);
 	const isMobile = useGame((state) => state.isMobile);
 	const setIsMobile = useGame((state) => state.setIsMobile);
 	const leftStickRef = useJoysticks((state) => state.leftStickRef);
@@ -912,6 +911,10 @@ export default function Interface() {
 
 		prevDoneObjectives.current = doneObjectives;
 	}, [doneObjectives, roomCount, showFindExit]);
+
+	if (!hasSeenInitialFlow) {
+		return <InitialFlow onComplete={() => setHasSeenInitialFlow(true)} />;
+	}
 
 	return (
 		<div className={`interface ${loading ? 'animated' : ''}`}>

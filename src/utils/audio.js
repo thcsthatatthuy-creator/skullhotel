@@ -343,6 +343,31 @@ export async function preloadSounds(onSoundLoaded) {
 		return Promise.resolve();
 	});
 
+	let audioCtx = null;
+	let keyBuffer = null;
+
+	try {
+		audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+		const response = await fetch('/sounds/key.mp3');
+		const arrayBuffer = await response.arrayBuffer();
+		keyBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+		audioInstances.webAudioCtx = audioCtx;
+		audioInstances.keyBuffer = keyBuffer;
+
+		// Unlock audio context on user interaction
+		const unlockAudioContext = () => {
+			if (audioCtx.state === 'suspended') {
+				audioCtx.resume();
+			}
+			window.removeEventListener('click', unlockAudioContext);
+			window.removeEventListener('keydown', unlockAudioContext);
+		};
+		window.addEventListener('click', unlockAudioContext);
+		window.addEventListener('keydown', unlockAudioContext);
+	} catch (error) {
+		console.error('Failed to load Web Audio for key sound:', error);
+	}
+
 	try {
 		const keyBlobUrl = await loadAudioFile('/sounds/key.mp3');
 		audioInstances.keyPool = Array(5)
@@ -363,7 +388,7 @@ export async function preloadSounds(onSoundLoaded) {
 				return audio;
 			});
 	} catch (error) {
-		console.error('Failed to load key sound:', error);
+		console.error('Failed to load key sound fallback:', error);
 	}
 
 	await Promise.all(loadPromises);
@@ -414,6 +439,26 @@ export function getAudioInstance(key) {
 
 export function getKeyAudioPool() {
 	return audioInstances.keyPool;
+}
+
+export function playKeySound() {
+	if (audioInstances.webAudioCtx && audioInstances.keyBuffer) {
+		const ctx = audioInstances.webAudioCtx;
+		if (ctx.state === 'suspended') {
+			ctx.resume();
+		}
+		const source = ctx.createBufferSource();
+		source.buffer = audioInstances.keyBuffer;
+		const gainNode = ctx.createGain();
+		gainNode.gain.value = Math.min(1, 0.25 * masterVolume);
+		source.connect(gainNode);
+		gainNode.connect(ctx.destination);
+		source.start(0);
+	} else if (audioInstances.keyPool && audioInstances.keyPool.length > 0) {
+		const audio = audioInstances.keyPool[Math.floor(Math.random() * audioInstances.keyPool.length)];
+		audio.currentTime = 0;
+		audio.play().catch(console.warn);
+	}
 }
 
 export const getSoundUrl = (soundName) => {

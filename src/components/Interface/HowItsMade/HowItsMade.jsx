@@ -344,103 +344,27 @@ function HowItsMadeContent({ onClose }) {
 				<div className="tech-container">
 					<h2>{t('ui.howItsMade.people')}</h2>
 					<div className="tech-description">
-						<h3
-							onClick={(e) =>
-								handleLinkClick(e, 'https://github.com/JamesHall38')
-							}
-						>
-							<a
-								href={isInSteamBuild ? '#' : 'https://github.com/JamesHall38'}
-								target={isInSteamBuild ? '_self' : '_blank'}
-								rel="noopener noreferrer"
-								onClick={(e) => isInSteamBuild && e.preventDefault()}
-								style={
-									isInSteamBuild
-										? { cursor: 'default', textDecoration: 'none' }
-										: {}
-								}
-							>
-								{t('ui.howItsMade.gameConceptDesignDev')}
-							</a>
-							<p
-								className="tech-author"
-								onClick={(e) =>
-									handleLinkClick(e, 'https://github.com/JamesHall38')
-								}
-							>
-								<a
-									href={isInSteamBuild ? '#' : 'https://github.com/JamesHall38'}
-									target={isInSteamBuild ? '_self' : '_blank'}
-									rel="noopener noreferrer"
-									onClick={(e) => isInSteamBuild && e.preventDefault()}
-									style={
-										isInSteamBuild
-											? { cursor: 'default', textDecoration: 'none' }
-											: {}
-									}
-								>
-									James Hall
-								</a>
+						<h3>
+							{t('ui.howItsMade.gameConceptDesignDev')}
+							<p className="tech-author">
+								Nhật Thiện
 							</p>
-							<div className="external-link-icon-container">
-								{!isInSteamBuild && (
-									<RxExternalLink className="external-link-icon" />
-								)}
-							</div>
 						</h3>
 					</div>
 					<div className="tech-description">
-						<h3
-							onClick={(e) =>
-								handleLinkClick(e, 'https://www.linkedin.com/in/lucas-houbre')
-							}
-						>
-							<a
-								href={
-									isInSteamBuild
-										? '#'
-										: 'https://www.linkedin.com/in/lucas-houbre'
-								}
-								target={isInSteamBuild ? '_self' : '_blank'}
-								rel="noopener noreferrer"
-								onClick={(e) => isInSteamBuild && e.preventDefault()}
-								style={
-									isInSteamBuild
-										? { cursor: 'default', textDecoration: 'none' }
-										: {}
-								}
-							>
-								{t('ui.howItsMade.uiArtDirection')}
-							</a>
-							<p
-								className="tech-author"
-								onClick={(e) =>
-									handleLinkClick(e, 'https://www.linkedin.com/in/lucas-houbre')
-								}
-							>
-								<a
-									href={
-										isInSteamBuild
-											? '#'
-											: 'https://www.linkedin.com/in/lucas-houbre'
-									}
-									target={isInSteamBuild ? '_self' : '_blank'}
-									rel="noopener noreferrer"
-									onClick={(e) => isInSteamBuild && e.preventDefault()}
-									style={
-										isInSteamBuild
-											? { cursor: 'default', textDecoration: 'none' }
-											: {}
-									}
-								>
-									Lucas Houbre
-								</a>
+						<h3>
+							{t('ui.howItsMade.uiArtDirection')}
+							<p className="tech-author">
+								Nhật Thiện
 							</p>
-							<div className="external-link-icon-container">
-								{!isInSteamBuild && (
-									<RxExternalLink className="external-link-icon" />
-								)}
-							</div>
+						</h3>
+					</div>
+					<div className="tech-description">
+						<h3>
+							{t('ui.howItsMade.models3D')}
+							<p className="tech-author">
+								Nguyễn Đăng Khoa
+							</p>
 						</h3>
 					</div>
 				</div>

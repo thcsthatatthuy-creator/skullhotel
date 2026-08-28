@@ -112,7 +112,8 @@
 			"r3fDescription": "A tool that makes it easier to use three.js with React",
 			"threejsJourneyDescription": "An online course to learn 3D for the web",
 			"gameConceptDesignDev": "Game concept, game design & game development",
-			"uiArtDirection": "User interface & Art direction"
+			"uiArtDirection": "User interface & Art direction",
+			"models3D": "3D Models"
 		},
 		"reception": {
 			"guestBook": "Guest Book",

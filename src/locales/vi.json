@@ -112,7 +112,8 @@
 			"r3fDescription": "Một công cụ giúp sử dụng three.js với React dễ dàng hơn",
 			"threejsJourneyDescription": "Một khóa học trực tuyến để tìm hiểu về 3D cho web",
 			"gameConceptDesignDev": "Khái niệm trò chơi, thiết kế trò chơi và phát triển trò chơi",
-			"uiArtDirection": "Giao diện người dùng & Hướng dẫn nghệ thuật"
+			"uiArtDirection": "Giao diện người dùng & Hướng dẫn nghệ thuật",
+			"models3D": "Các models 3D"
 		},
 		"reception": {
 			"guestBook": "Sách khách",

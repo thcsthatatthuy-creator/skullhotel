@@ -8,7 +8,7 @@ export default function InitialFlow({ onComplete }) {
 		if (step === 0) {
 			const timer1 = setTimeout(() => {
 				onComplete();
-			}, 4000); // Logo animation takes 4s total
+			}, 2500); // Logo animation takes 2s, wait 0.5s before transitioning
 
 			return () => clearTimeout(timer1);
 		}

@@ -19,7 +19,7 @@
 	max-width: 600px;
 	width: 90%;
 	opacity: 0;
-	animation: logoAnim 4s linear forwards;
+	animation: logoAnim 2s linear forwards;
 }
 
 @keyframes logoAnim {

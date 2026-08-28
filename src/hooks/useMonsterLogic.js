@@ -114,6 +114,7 @@ export default function useMonsterLogic() {
 	const setShakeIntensity = useGame((state) => state.setShakeIntensity);
 	const setJumpScare = useGame((state) => state.setJumpScare);
 	const jumpScare = useGame((state) => state.jumpScare);
+	const isInvincible = useGame((state) => state.isInvincible);
 	const deaths = useGame((state) => state.deaths);
 	const setDisableControls = useGame((state) => state.setDisableControls);
 	const isEndAnimationPlaying = useGame((state) => state.isEndAnimationPlaying);
@@ -473,7 +474,7 @@ export default function useMonsterLogic() {
 				return;
 			}
 
-			if (distanceToCamera <= ATTACK_DISTANCE) {
+			if (distanceToCamera <= ATTACK_DISTANCE && !isInvincible) {
 				const currentTime = Date.now();
 				const timeSinceLastJumpScare =
 					currentTime - lastJumpScareTimeRef.current;

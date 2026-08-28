@@ -281,6 +281,18 @@ const useGameStore = create(
 			useHiding.getState().restart();
 		},
 
+		revive: () => {
+			set(() => ({
+				jumpScare: false,
+				openDeathScreen: false,
+				disableControls: false,
+				monsterAttackDisableControls: false,
+				endAnimationPlaying: false,
+				customDeathMessage: null,
+				// We don't reset seedData or player position here, we just continue from where they were.
+			}));
+		},
+
 		resetTutorial: () => {
 			set(() => ({
 				alternateTutorialRoom: false,

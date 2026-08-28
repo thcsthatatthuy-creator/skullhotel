@@ -32,6 +32,7 @@ import {
 	playKeySound,
 	areSoundsLoaded,
 	preloadSounds,
+	getKeyAudioPool,
 } from '../../utils/audio';
 import {
 	isPointerLocked,

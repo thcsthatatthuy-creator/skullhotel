@@ -119,14 +119,14 @@ export default function useChaseEnding() {
 		chaseActiveRef.current = false;
 		chaseUIRef.current.phase = 'lost';
 
-		// Dùng endAnimationPlaying để trigger jumpscare giống như bình thường
+		// Dùng jumpScare giống như bình thường
 		setDisableControls(true);
 		setIsGameplayActive(false);
 
 		setTimeout(() => {
-			setEndAnimationPlaying(true);
+			setJumpScare(true);
 		}, 200);
-	}, [setDisableControls, setIsGameplayActive, setEndAnimationPlaying]);
+	}, [setDisableControls, setIsGameplayActive, setJumpScare]);
 
 	// Trigger thắng
 	const triggerWon = useCallback(() => {
@@ -156,13 +156,11 @@ export default function useChaseEnding() {
 			return;
 		}
 
-		// Disable controls
-		setDisableControls(true);
 		setIsGameplayActive(false);
 
-		// Lưu vị trí hiện tại của camera cho cinematic pan
-		startCamPosRef.current.copy(camera.position);
-		startCamQuatRef.current.copy(camera.quaternion);
+		// Đặt player ngay lập tức
+		camera.position.set(CHASE_PLAYER_START.x, 1.7, CHASE_PLAYER_START.z);
+		camera.quaternion.setFromEuler(new THREE.Euler(0, -Math.PI / 2, 0));
 
 		// Đặt monster ẩn đằng sau
 		monsterXRef.current = CHASE_PLAYER_START.x + CHASE_MONSTER_START_OFFSET;
@@ -173,61 +171,45 @@ export default function useChaseEnding() {
 
 		monsterPositionVec.current.set(monsterXRef.current, 0, CHASE_PLAYER_START.z);
 
-		// Bắt đầu cinematic pan
-		chaseUIRef.current.phase = 'cinematic';
+		// Bắt đầu đếm ngược ngay lập tức
+		chaseUIRef.current.phase = 'countdown';
+		chaseUIRef.current.countdownValue = 3;
 		window.dispatchEvent(new CustomEvent('chaseUIUpdate'));
 
-		// Sau 2.5s cinematic pan, bắt đầu đếm ngược
-		const panTimeout = setTimeout(() => {
-			chaseUIRef.current.phase = 'countdown';
-			chaseUIRef.current.countdownValue = 3;
-			
-			// Đảm bảo camera ở đúng vị trí
-			camera.position.copy(targetCamPosRef.current);
-			camera.quaternion.copy(targetCamQuatRef.current);
+		const timings = [
+			{ delay: 1000, value: 2 },
+			{ delay: 2000, value: 1 },
+			{ delay: 3000, value: 'ready' },
+			{ delay: 4200, value: 'go' },
+		];
 
-			const timings = [
-				{ delay: 0,    value: 3 },
-				{ delay: 1000, value: 2 },
-				{ delay: 2000, value: 1 },
-				{ delay: 3000, value: 'ready' },
-				{ delay: 4200, value: 'go' },
-			];
-
-			const timeouts = timings.map(({ delay, value }) =>
-				setTimeout(() => {
-					chaseUIRef.current.countdownValue = value;
-					window.dispatchEvent(new CustomEvent('chaseUIUpdate'));
-				}, delay)
-			);
-
-			// Sau "GO", mở khóa điều khiển
-			const startTimeout = setTimeout(() => {
-				chaseUIRef.current.phase = 'running';
-				chaseUIRef.current.timeRemaining = CHASE_DURATION;
-				countdownDoneRef.current = true;
-				chaseActiveRef.current = true;
-
-				setDisableControls(false);
-				setIsGameplayActive(true);
-
+		const timeouts = timings.map(({ delay, value }) =>
+			setTimeout(() => {
+				chaseUIRef.current.countdownValue = value;
 				window.dispatchEvent(new CustomEvent('chaseUIUpdate'));
-			}, 5200);
+			}, delay)
+		);
 
-			// Cleanup inner timeouts
-			return () => {
-				timeouts.forEach(clearTimeout);
-				clearTimeout(startTimeout);
-			};
-		}, 2500);
+		// Sau "GO", mở khóa điều khiển
+		const startTimeout = setTimeout(() => {
+			chaseUIRef.current.phase = 'running';
+			chaseUIRef.current.timeRemaining = CHASE_DURATION;
+			countdownDoneRef.current = true;
+			chaseActiveRef.current = true;
 
+			setIsGameplayActive(true);
+
+			window.dispatchEvent(new CustomEvent('chaseUIUpdate'));
+		}, 5200);
+
+		// Cleanup inner timeouts
 		return () => {
-			clearTimeout(panTimeout);
+			timeouts.forEach(clearTimeout);
+			clearTimeout(startTimeout);
 		};
 	}, [
 		chaseEndingActive,
 		camera,
-		setDisableControls,
 		setIsGameplayActive,
 		setMonsterPosition,
 		setMonsterRotation,
@@ -239,19 +221,6 @@ export default function useChaseEnding() {
 	// Main game loop cho Chase (chạy mỗi frame)
 	useFrame((state, delta) => {
 		if (!chaseEndingActive || caughtRef.current || wonRef.current) return;
-
-		// Xử lý cinematic pan
-		if (chaseUIRef.current.phase === 'cinematic') {
-			cinematicTimeRef.current += delta;
-			const t = Math.min(1.0, cinematicTimeRef.current / 2.5); // 2.5s pan
-			
-			// Easing function (ease-in-out)
-			const easeT = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
-
-			camera.position.lerpVectors(startCamPosRef.current, targetCamPosRef.current, easeT);
-			camera.quaternion.slerpQuaternions(startCamQuatRef.current, targetCamQuatRef.current, easeT);
-			return;
-		}
 
 		if (!chaseActiveRef.current) return;
 
@@ -282,8 +251,8 @@ export default function useChaseEnding() {
 		if (timerRef.current > 2.0) {
 			if (timerRef.current > 2.0 && timerRef.current < 2.1) {
 				// Vừa hết delay, bắt đầu chạy
-				playAnimation('Walk');
-				setAnimationSpeed(3.5);
+				playAnimation('Run');
+				setAnimationSpeed(1.5);
 			}
 
 			// Monster luôn ở sau player (player.x > monster.x vì player chạy về âm X)

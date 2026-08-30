@@ -89,10 +89,17 @@ export default function useChaseEnding() {
 		subtitlePhase: 'none', // 'none' | 'antagonist' | 'player'
 	});
 
+	const cinematicTimeRef = useRef(0);
+	const startCamPosRef = useRef(new THREE.Vector3());
+	const startCamQuatRef = useRef(new THREE.Quaternion());
+	const targetCamPosRef = useRef(new THREE.Vector3(CHASE_PLAYER_START.x, 1.7, CHASE_PLAYER_START.z));
+	const targetCamQuatRef = useRef(new THREE.Quaternion().setFromEuler(new THREE.Euler(0, Math.PI, 0)));
+
 	// Reset all refs khi bắt đầu lại
 	const resetInternals = useCallback(() => {
 		chaseActiveRef.current = false;
 		timerRef.current = 0;
+		cinematicTimeRef.current = 0;
 		subtitleShownRef.current = false;
 		caughtRef.current = false;
 		wonRef.current = false;
@@ -149,60 +156,73 @@ export default function useChaseEnding() {
 			return;
 		}
 
-		// Disable controls, đặt lại vị trí
+		// Disable controls
 		setDisableControls(true);
 		setIsGameplayActive(false);
 
-		// Đặt monster ẩn đằng sau trước
-		setMonsterPosition([CHASE_PLAYER_START.x + CHASE_MONSTER_START_OFFSET, 0, 0]);
-		setMonsterRotation([0, -Math.PI / 2, 0]); // quay mặt về phía player (hướng âm X)
-		setMonsterState('chaseEnding');
-		playAnimation('Walk');
-		setAnimationSpeed(3.5); // animation nhanh để trông như đang chạy
+		// Lưu vị trí hiện tại của camera cho cinematic pan
+		startCamPosRef.current.copy(camera.position);
+		startCamQuatRef.current.copy(camera.quaternion);
 
-		// Đặt player về đầu hành lang
-		camera.position.set(CHASE_PLAYER_START.x, 1.7, CHASE_PLAYER_START.z);
-		camera.rotation.set(0, Math.PI, 0); // nhìn về hướng âm X (hành lang)
-
+		// Đặt monster ẩn đằng sau
 		monsterXRef.current = CHASE_PLAYER_START.x + CHASE_MONSTER_START_OFFSET;
-		monsterPositionVec.current.set(monsterXRef.current, 0, 0);
+		setMonsterPosition([monsterXRef.current, 0, CHASE_PLAYER_START.z]);
+		setMonsterRotation([0, -Math.PI / 2, 0]);
+		setMonsterState('chaseEnding');
+		playAnimation('Idle'); // Đứng im lúc đầu
 
-		chaseUIRef.current.phase = 'countdown';
-		chaseUIRef.current.countdownValue = 3;
+		monsterPositionVec.current.set(monsterXRef.current, 0, CHASE_PLAYER_START.z);
 
-		// Countdown sequence
-		const timings = [
-			{ delay: 0,    value: 3 },
-			{ delay: 1000, value: 2 },
-			{ delay: 2000, value: 1 },
-			{ delay: 3000, value: 'ready' },
-			{ delay: 4200, value: 'go' },
-		];
+		// Bắt đầu cinematic pan
+		chaseUIRef.current.phase = 'cinematic';
+		window.dispatchEvent(new CustomEvent('chaseUIUpdate'));
 
-		const timeouts = timings.map(({ delay, value }) =>
-			setTimeout(() => {
-				chaseUIRef.current.countdownValue = value;
-				// Dispatch event để React UI re-render
+		// Sau 2.5s cinematic pan, bắt đầu đếm ngược
+		const panTimeout = setTimeout(() => {
+			chaseUIRef.current.phase = 'countdown';
+			chaseUIRef.current.countdownValue = 3;
+			
+			// Đảm bảo camera ở đúng vị trí
+			camera.position.copy(targetCamPosRef.current);
+			camera.quaternion.copy(targetCamQuatRef.current);
+
+			const timings = [
+				{ delay: 0,    value: 3 },
+				{ delay: 1000, value: 2 },
+				{ delay: 2000, value: 1 },
+				{ delay: 3000, value: 'ready' },
+				{ delay: 4200, value: 'go' },
+			];
+
+			const timeouts = timings.map(({ delay, value }) =>
+				setTimeout(() => {
+					chaseUIRef.current.countdownValue = value;
+					window.dispatchEvent(new CustomEvent('chaseUIUpdate'));
+				}, delay)
+			);
+
+			// Sau "GO", mở khóa điều khiển
+			const startTimeout = setTimeout(() => {
+				chaseUIRef.current.phase = 'running';
+				chaseUIRef.current.timeRemaining = CHASE_DURATION;
+				countdownDoneRef.current = true;
+				chaseActiveRef.current = true;
+
+				setDisableControls(false);
+				setIsGameplayActive(true);
+
 				window.dispatchEvent(new CustomEvent('chaseUIUpdate'));
-			}, delay)
-		);
+			}, 5200);
 
-		// Sau "GO", mở khóa điều khiển
-		const startTimeout = setTimeout(() => {
-			chaseUIRef.current.phase = 'running';
-			chaseUIRef.current.timeRemaining = CHASE_DURATION;
-			countdownDoneRef.current = true;
-			chaseActiveRef.current = true;
-
-			setDisableControls(false);
-			setIsGameplayActive(true);
-
-			window.dispatchEvent(new CustomEvent('chaseUIUpdate'));
-		}, 5200); // 4200ms 'go' + 1000ms hiển thị
+			// Cleanup inner timeouts
+			return () => {
+				timeouts.forEach(clearTimeout);
+				clearTimeout(startTimeout);
+			};
+		}, 2500);
 
 		return () => {
-			timeouts.forEach(clearTimeout);
-			clearTimeout(startTimeout);
+			clearTimeout(panTimeout);
 		};
 	}, [
 		chaseEndingActive,
@@ -213,13 +233,27 @@ export default function useChaseEnding() {
 		setMonsterRotation,
 		setMonsterState,
 		playAnimation,
-		setAnimationSpeed,
 		resetInternals,
 	]);
 
 	// Main game loop cho Chase (chạy mỗi frame)
 	useFrame((state, delta) => {
-		if (!chaseActiveRef.current || caughtRef.current || wonRef.current) return;
+		if (!chaseEndingActive || caughtRef.current || wonRef.current) return;
+
+		// Xử lý cinematic pan
+		if (chaseUIRef.current.phase === 'cinematic') {
+			cinematicTimeRef.current += delta;
+			const t = Math.min(1.0, cinematicTimeRef.current / 2.5); // 2.5s pan
+			
+			// Easing function (ease-in-out)
+			const easeT = t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+
+			camera.position.lerpVectors(startCamPosRef.current, targetCamPosRef.current, easeT);
+			camera.quaternion.slerpQuaternions(startCamQuatRef.current, targetCamQuatRef.current, easeT);
+			return;
+		}
+
+		if (!chaseActiveRef.current) return;
 
 		const playerX = camera.position.x;
 		const playerZ = camera.position.z;
@@ -244,19 +278,34 @@ export default function useChaseEnding() {
 		}
 
 		// === ELASTIC MONSTER AI ===
-		// Monster luôn ở sau player (player.x > monster.x vì player chạy về âm X)
-		// Khoảng cách thực: monsterX - playerX (vì cả 2 đều di chuyển về âm X)
-		const currentDistance = monsterXRef.current - playerX;
+		// Monster delay 2 giây đầu tiên cho người chơi chạy trước
+		if (timerRef.current > 2.0) {
+			if (timerRef.current > 2.0 && timerRef.current < 2.1) {
+				// Vừa hết delay, bắt đầu chạy
+				playAnimation('Walk');
+				setAnimationSpeed(3.5);
+			}
 
-		// Tính tốc độ elastic
-		const gap = currentDistance - MONSTER_TARGET_DISTANCE;
-		// gap > 0: monster ở quá xa, cần tăng tốc
-		// gap < 0: monster ở quá gần, cần giảm tốc
-		let monsterSpeed = MONSTER_BASE_SPEED + gap * MONSTER_GAP_FACTOR;
-		monsterSpeed = Math.max(MONSTER_MIN_SPEED, Math.min(MONSTER_MAX_SPEED, monsterSpeed));
+			// Monster luôn ở sau player (player.x > monster.x vì player chạy về âm X)
+			// Khoảng cách thực: monsterX - playerX (vì cả 2 đều di chuyển về âm X)
+			const currentDistance = monsterXRef.current - playerX;
 
-		// Monster di chuyển về âm X (đuổi theo player)
-		monsterXRef.current -= monsterSpeed * delta;
+			// Tăng tốc dần về cuối: target distance giảm dần theo thời gian
+			const progress = timerRef.current / CHASE_DURATION; // 0.0 -> 1.0
+			const dynamicTargetDistance = MONSTER_TARGET_DISTANCE - (progress * 1.5); // Ép sát hơn về cuối
+
+			// Tính tốc độ elastic
+			const gap = currentDistance - dynamicTargetDistance;
+			
+			let monsterSpeed = MONSTER_BASE_SPEED + gap * MONSTER_GAP_FACTOR;
+			// Tốc độ cơ bản cũng tăng dần
+			monsterSpeed += progress * 1.0; 
+
+			monsterSpeed = Math.max(MONSTER_MIN_SPEED, Math.min(MONSTER_MAX_SPEED, monsterSpeed));
+
+			// Monster di chuyển về âm X (đuổi theo player)
+			monsterXRef.current -= monsterSpeed * delta;
+		}
 
 		// Cập nhật vị trí monster trong scene
 		setMonsterPosition([monsterXRef.current, 0, playerZ]);

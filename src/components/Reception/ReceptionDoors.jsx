@@ -105,8 +105,8 @@ export default function ReceptionDoors() {
 	const setPlayerPositionRoom = useGame((state) => state.setPlayerPositionRoom);
 	const isTutorialOpen = useGame((state) => state.isTutorialOpen);
 	const setIsTutorialOpen = useGame((state) => state.setIsTutorialOpen);
-	const setEndAnimationPlaying = useGame(
-		(state) => state.setEndAnimationPlaying
+	const setShowEndDialogue = useGame(
+		(state) => state.setShowEndDialogue
 	);
 	const roomCount = useGameplaySettings((state) => state.roomCount);
 
@@ -210,7 +210,7 @@ export default function ReceptionDoors() {
 					setOpen={(value) => {
 						if (value) {
 							if (doneObjectives >= roomCount / 2) {
-								setEndAnimationPlaying(true);
+								setShowEndDialogue(true);
 							} else {
 								if (currentDialogueIndex !== 0) {
 									setCurrentDialogueIndex(0);

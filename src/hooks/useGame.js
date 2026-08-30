@@ -75,6 +75,14 @@ const useGameStore = create(
 		setEndAnimationPlaying: (state) =>
 			set(() => ({ endAnimationPlaying: state })),
 
+		showEndDialogue: false,
+		setShowEndDialogue: (state) =>
+			set(() => ({ showEndDialogue: state })),
+
+		chaseEndingActive: false,
+		setChaseEndingActive: (state) =>
+			set(() => ({ chaseEndingActive: state })),
+
 		// loading: true,
 		loading: false,
 		setLoading: (state) => set(() => ({ loading: state })),
@@ -270,6 +278,8 @@ const useGameStore = create(
 				completedObjective: null,
 				completedRoom: null,
 				endAnimationPlaying: false,
+				showEndDialogue: false,
+				chaseEndingActive: false,
 				gameEndTime: null,
 				shuffleVersion: 0,
 				cleanedFoodRooms: {},
@@ -288,6 +298,8 @@ const useGameStore = create(
 				disableControls: false,
 				monsterAttackDisableControls: false,
 				endAnimationPlaying: false,
+				showEndDialogue: false,
+				chaseEndingActive: false,
 				customDeathMessage: null,
 				// We don't reset seedData or player position here, we just continue from where they were.
 			}));

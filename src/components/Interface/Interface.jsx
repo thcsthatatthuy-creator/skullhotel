@@ -24,6 +24,8 @@ import DeathScreen from './DeathScreen/DeathScreen';
 import IntroDialogue from './IntroDialogue/IntroDialogue';
 import AdminMenu from './AdminMenu';
 import InitialFlow from './InitialFlow/InitialFlow';
+import EndDialogue from './EndDialogue/EndDialogue';
+import ChaseEnding from './ChaseEnding/ChaseEnding';
 import './Interface.css';
 import { measurePerformance } from '../../hooks/usePerformance';
 import useTextureQueue from '../../hooks/useTextureQueue';
@@ -468,7 +470,12 @@ export default function Interface() {
 	const deviceMode = useGame((state) => state.deviceMode);
 	const isAnyPopupOpen = useInterface((state) => state.isAnyPopupOpen);
 	const isEndAnimationPlaying = useGame((state) => state.isEndAnimationPlaying);
+	const showEndDialogue = useGame((state) => state.showEndDialogue);
+	const setEndAnimationPlaying = useGame((state) => state.setEndAnimationPlaying);
+	const setShowEndDialogue = useGame((state) => state.setShowEndDialogue);
 	const introIsPlaying = useGame((state) => state.introIsPlaying);
+	const chaseEndingActive = useGame((state) => state.chaseEndingActive);
+	const setChaseEndingActive = useGame((state) => state.setChaseEndingActive);
 
 	/* Show story dialogue once, right after the camera intro finishes */
 	const [showIntroDialogue, setShowIntroDialogue] = useState(false);
@@ -1102,6 +1109,21 @@ export default function Interface() {
 
 			{showIntroDialogue && (
 				<IntroDialogue onFinish={() => setShowIntroDialogue(false)} />
+			)}
+
+			{showEndDialogue && (
+				<EndDialogue
+					onFinish={() => {
+						setShowEndDialogue(false);
+						// Kích hoạt chase ending thay vì jumpscare ngay lập tức
+						setChaseEndingActive(true);
+					}}
+				/>
+			)}
+
+			{/* Chase Ending HUD: Countdown, Timer Bar, Subtitles */}
+			{chaseEndingActive && (
+				<ChaseEnding chaseUIRef={window.__chaseUIRef} />
 			)}
 
 			<GuestBook />

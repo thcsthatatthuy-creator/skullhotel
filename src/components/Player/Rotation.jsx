@@ -6,7 +6,6 @@ import useGame from '../../hooks/useGame';
 import useGamepadControls from '../../hooks/useGamepadControls';
 import useJoysticksStore from '../../hooks/useJoysticks';
 import useSettings from '../../hooks/useSettings';
-import { CHASE_PLAYER_START } from '../../hooks/useChaseEnding';
 import * as THREE from 'three';
 
 const floor = -0.2;
@@ -58,7 +57,6 @@ export default function Rotation({
 	const temporaryDisableMouseLook = useGame(
 		(state) => state.temporaryDisableMouseLook
 	);
-	const chaseEndingActive = useGame((state) => state.chaseEndingActive);
 	const [subscribeKeys, getKeys] = useKeyboardControls();
 	const { camera } = useThree();
 	const getGamepadControls = useGamepadControls();
@@ -94,16 +92,6 @@ export default function Rotation({
 	useEffect(() => {
 		reset();
 	}, [deaths, reset]);
-
-	useEffect(() => {
-		if (chaseEndingActive) {
-			yaw.current = -Math.PI / 2;
-			pitch.current = 0;
-			hasMovedMouseAfterIntro.current = true;
-			camera.rotation.set(0, -Math.PI / 2, 0, 'YXZ');
-			playerPosition.current.copy(CHASE_PLAYER_START);
-		}
-	}, [chaseEndingActive, camera, playerPosition]);
 
 	useEffect(() => {
 		const unsubscribeReset = useGame.subscribe(

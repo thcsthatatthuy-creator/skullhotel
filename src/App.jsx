@@ -65,7 +65,6 @@ import ShadowManager from './components/ShadowManager';
 import EndGameAnimation from './components/EndGameAnimation';
 import { isPointerLocked, exitPointerLock } from './utils/pointerLock';
 import { isElectron } from './utils/platform';
-import useChaseEnding from './hooks/useChaseEnding';
 
 const generateLevelOptions = () => {
 	const options = {
@@ -136,14 +135,6 @@ function App() {
 	const introIsPlaying = useGame((state) => state.introIsPlaying);
 	const hasIntroBeenPlayedRef = useRef(false);
 	const masterVolume = useSettings((state) => state.masterVolume);
-
-	// Chase ending logic — phải ở trong Canvas context (có useThree/useFrame)
-	const { chaseUIRef } = useChaseEnding();
-
-	// Expose chaseUIRef lên window để Interface.jsx có thể đọc
-	useEffect(() => {
-		window.__chaseUIRef = chaseUIRef;
-	}, [chaseUIRef]);
 
 	const setFirestoreReachable = useGame((state) => state.setFirestoreReachable);
 

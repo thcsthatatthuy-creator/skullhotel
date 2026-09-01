@@ -1,0 +1,260 @@
+/* =====================================================
+   CHASE ENDING — Full Screen Horror HUD
+   ===================================================== */
+
+/* ---------- SHARED BASE ---------- */
+.chase-overlay {
+	position: fixed;
+	inset: 0;
+	z-index: 250;
+	pointer-events: none;
+	font-family: 'Lincoln Road Regular', 'Georgia', serif;
+}
+
+/* ========================================================
+   COUNTDOWN PHASE
+   ======================================================== */
+.chase-countdown-backdrop {
+	position: fixed;
+	inset: 0;
+	z-index: 250;
+	background: rgba(0, 0, 0, 0.72);
+	backdrop-filter: blur(6px);
+	-webkit-backdrop-filter: blur(6px);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	pointer-events: none;
+}
+
+.chase-countdown-number {
+	font-size: clamp(8rem, 22vw, 18rem);
+	font-weight: 900;
+	letter-spacing: -4px;
+	line-height: 1;
+	color: #ff2222;
+	text-shadow:
+		0 0 40px rgba(255, 0, 0, 0.8),
+		0 0 80px rgba(255, 0, 0, 0.4),
+		4px 4px 0 #7a0000;
+	animation: count-pop 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.chase-countdown-ready {
+	font-size: clamp(3rem, 8vw, 6rem);
+	letter-spacing: 12px;
+	text-transform: uppercase;
+	color: #ffcc00;
+	text-shadow:
+		0 0 30px rgba(255, 200, 0, 0.8),
+		0 0 60px rgba(255, 200, 0, 0.4),
+		3px 3px 0 #6b5200;
+	animation: count-pop 0.35s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.chase-countdown-go {
+	font-size: clamp(5rem, 14vw, 12rem);
+	letter-spacing: 8px;
+	text-transform: uppercase;
+	color: #00ff88;
+	text-shadow:
+		0 0 40px rgba(0, 255, 136, 0.9),
+		0 0 80px rgba(0, 255, 136, 0.5),
+		4px 4px 0 #005c38;
+	animation: go-burst 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes count-pop {
+	from {
+		opacity: 0;
+		transform: scale(2.2);
+		filter: blur(8px);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+		filter: blur(0);
+	}
+}
+
+@keyframes go-burst {
+	0%   { opacity: 0; transform: scale(0.3); filter: blur(20px); }
+	60%  { opacity: 1; transform: scale(1.15); filter: blur(0); }
+	100% { opacity: 1; transform: scale(1); filter: blur(0); }
+}
+
+/* ========================================================
+   PROGRESS BAR (30s timer)
+   ======================================================== */
+.chase-timer-bar-wrapper {
+	position: fixed;
+	top: 20px;
+	left: 50%;
+	transform: translateX(-50%);
+	width: 80%;
+	max-width: 600px;
+	z-index: 251;
+	padding: 0;
+	pointer-events: none;
+}
+
+.chase-timer-bar-track {
+	width: 100%;
+	height: 12px;
+	background: rgba(0, 0, 0, 0.6);
+	border: 2px solid rgba(255, 255, 255, 0.2);
+	border-radius: 6px;
+	overflow: hidden;
+}
+
+.chase-timer-bar-fill {
+	height: 100%;
+	transition: width 0.1s linear, background-color 0.5s ease;
+	background: linear-gradient(90deg, #ff2222, #ff6622);
+	box-shadow: 0 0 12px rgba(255, 60, 0, 0.6);
+}
+
+.chase-timer-bar-fill.warning {
+	background: linear-gradient(90deg, #ff0000, #ff3300);
+	animation: bar-pulse 0.4s ease-in-out infinite alternate;
+}
+
+@keyframes bar-pulse {
+	from { box-shadow: 0 0 8px rgba(255, 0, 0, 0.5); }
+	to   { box-shadow: 0 0 25px rgba(255, 0, 0, 1); }
+}
+
+/* Time label above bar */
+.chase-timer-label {
+	position: fixed;
+	top: 40px;
+	left: 50%;
+	transform: translateX(-50%);
+	z-index: 252;
+	font-family: 'Lincoln Road Regular', monospace;
+	font-size: clamp(1rem, 2.5vw, 1.5rem);
+	color: rgba(255, 80, 80, 0.9);
+	letter-spacing: 2px;
+	text-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+	pointer-events: none;
+}
+
+.chase-timer-label.warning {
+	color: #ff2222;
+	animation: label-flash 0.3s step-end infinite;
+}
+
+@keyframes label-flash {
+	0%, 100% { opacity: 1; }
+	50%       { opacity: 0.3; }
+}
+
+/* ========================================================
+   DYNAMIC SUBTITLES (bottom, Genshin-style but red theme)
+   ======================================================== */
+.chase-subtitle-panel {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 252;
+	padding: 0 clamp(1.5rem, 5vw, 5rem) 1.4rem;
+	pointer-events: none;
+	animation: subtitle-slide-up 0.4s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes subtitle-slide-up {
+	from { opacity: 0; transform: translateY(20px); }
+	to   { opacity: 1; transform: translateY(0); }
+}
+
+.chase-subtitle-name {
+	display: inline-block;
+	background: linear-gradient(135deg, #1a0808ee, #0e0404ee);
+	border: 1px solid #ef5b5b88;
+	border-bottom: none;
+	padding: 0.25rem 1rem 0.4rem;
+	margin-bottom: -1px;
+}
+
+.chase-subtitle-name span {
+	font-family: 'Lincoln Road Regular', sans-serif;
+	font-size: clamp(0.7rem, 1.4vw, 0.85rem);
+	letter-spacing: 3px;
+	text-transform: uppercase;
+	color: #ef5b5b;
+}
+
+.chase-subtitle-textbox {
+	background: linear-gradient(180deg, #0e0404e8 0%, #0a0404f0 100%);
+	border: 1px solid #ef5b5b55;
+	border-top: 1px solid #ef5b5b88;
+	padding: 0.8rem clamp(1rem, 2.5vw, 1.5rem);
+	position: relative;
+	box-shadow:
+		inset 0 1px 0 #ef5b5b1a,
+		0 -4px 25px rgba(0, 0, 0, 0.55);
+}
+
+.chase-subtitle-textbox::before {
+	content: '';
+	position: absolute;
+	top: 0; left: 0; right: 0;
+	height: 1px;
+	background: linear-gradient(90deg, transparent, #ef5b5b66, transparent);
+}
+
+.chase-subtitle-text {
+	font-family: 'Lincoln Road Regular', sans-serif;
+	font-size: clamp(0.9rem, 2vw, 1.05rem);
+	color: #e89a9a;
+	line-height: 1.6;
+	min-height: 1.8rem;
+}
+
+.chase-subtitle-text .cursor {
+	display: inline-block;
+	width: 2px;
+	height: 0.9em;
+	background: #ef5b5b;
+	margin-left: 2px;
+	vertical-align: middle;
+	animation: sub-blink 0.7s step-end infinite;
+}
+
+@keyframes sub-blink {
+	0%, 100% { opacity: 1; }
+	50%       { opacity: 0; }
+}
+
+/* ========================================================
+   VIGNETTE — tạo cảm giác ngột ngạt hơn khi gần hết time
+   ======================================================== */
+.chase-vignette {
+	position: fixed;
+	inset: 0;
+	z-index: 249;
+	pointer-events: none;
+	background: radial-gradient(
+		ellipse at center,
+		transparent 50%,
+		rgba(60, 0, 0, 0.0) 70%,
+		rgba(120, 0, 0, 0.0) 100%
+	);
+	transition: opacity 1s ease;
+}
+
+.chase-vignette.warning {
+	background: radial-gradient(
+		ellipse at center,
+		transparent 40%,
+		rgba(60, 0, 0, 0.35) 70%,
+		rgba(140, 0, 0, 0.65) 100%
+	);
+	animation: vignette-pulse 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes vignette-pulse {
+	from { opacity: 0.7; }
+	to   { opacity: 1; }
+}

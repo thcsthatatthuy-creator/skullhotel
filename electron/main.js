@@ -71,7 +71,7 @@ function getBasePath() {
 		let appPath = null;
 		try {
 			appPath = app.getAppPath();
-		} catch (e) { }
+		} catch (e) {}
 		const asarBuild = appPath ? path.join(appPath, 'build') : null;
 		const asarMain = asarBuild
 			? path.join(asarBuild, 'assets', 'main.js')
@@ -440,4 +440,3 @@ app.on('window-all-closed', function () {
 		app.quit();
 	}
 });
-

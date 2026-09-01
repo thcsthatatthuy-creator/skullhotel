@@ -25,6 +25,9 @@ const GRID_OFFSET_Z = 150;
 
 const LISTENING_SPEED_MULTIPLIER = 0;
 
+// Chase ending speed boost
+const CHASE_SPEED = 1.65;
+
 export default function Movement({
 	playerPosition,
 	playerVelocity,
@@ -66,6 +69,7 @@ export default function Movement({
 	const isListening = useGame((state) => state.isListening);
 	const [listeningProgress, setListeningProgress] = useState(0);
 	const introIsPlaying = useGame((state) => state.introIsPlaying);
+	const chaseEndingActive = useGame((state) => state.chaseEndingActive);
 
 	const [gridOffsetX, setGridOffsetX] = useState(0);
 	const roomCount = useGameplaySettings((state) => state.roomCount);
@@ -253,6 +257,42 @@ export default function Movement({
 
 		frontVector.set(0, 0, 0);
 		sideVector.set(0, 0, 0);
+
+		// === CHASE ENDING MODE ===
+		// Trong chase mode, W/S chạy thẳng theo hành lang (âm X)
+		// bất kể camera đang nhìn đâu (có thể ngoái nhìn ra sau)
+		if (chaseEndingActive) {
+			if (isGameplayActive) {
+				let chaseForward = false;
+				if (isMobile) {
+					chaseForward = leftStickRef.current.y < -0.1;
+				} else {
+					chaseForward = forward || gamepadControls.forward;
+				}
+
+				direction.set(0, 0, 0);
+				if (chaseForward) {
+					// Hướng âm X = đi sâu vào hành lang (chạy thoát)
+					direction.set(-1, 0, 0);
+				}
+
+				direction.multiplyScalar(CHASE_SPEED);
+				playerVelocity.current.copy(direction);
+
+				const newPosition = playerPosition.current
+					.clone()
+					.add(playerVelocity.current.clone().multiplyScalar(delta));
+
+				// Trong chase mode chỉ di chuyển theo X (không check collision side walls)
+				playerPosition.current.x = newPosition.x;
+				playerPosition.current.z = 0; // giữ player ở giữa hành lang
+
+				state.camera.position.x = playerPosition.current.x;
+				state.camera.position.z = playerPosition.current.z;
+				state.camera.position.y = playerPosition.current.y + 1.7;
+			}
+			return;
+		}
 
 		if (isGameplayActive) {
 			if (isMobile) {

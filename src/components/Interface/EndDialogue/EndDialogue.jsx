@@ -10,7 +10,8 @@ const SCRIPT = [
 	{ speaker: '???', text: 'Hahahaahahaaaaa (cười gian mãnh)' },
 	{ speaker: '???', text: 'Chưa ai từng làm ở đây mà có thể rời đi an toàn cả, mày nghĩ mày được đi sao, mày đã biết quá nhiều bí mật ở đây rồii' },
 	{ speaker: 'TÔI', text: 'Tôi hứa khi ra ngoài sẽ không hé răng dù chỉ nửa lời về khách sạn này. Làm ơn cho tôi rời đi đi mà' },
-	{ speaker: '???', text: 'Cách duy nhất để giữ được bí mật đó là thủ tiêu người giữ bí mật. Thôi không dài dòng với mày nữa. CHẾT ĐI !', isFinal: true },
+	{ speaker: '???', text: 'Cách duy nhất để giữ được bí mật đó là thủ tiêu người giữ bí mật. Thôi không dài dòng với mày nữa. CHẾT ĐI !' },
+	{ speaker: 'TÔI', text: 'Hừ... ông còn lâu mới giết được tôi.', isFinal: true },
 ];
 
 /* ─── COMPONENT ──────────────────────────────── */

@@ -16,6 +16,10 @@ const useGameStore = create(
 		incrementRealDeaths: () =>
 			set((state) => ({ realDeaths: state.realDeaths + 1 })),
 
+		// Hệ thống hồi sinh: true = đã dùng 1 lần hồi sinh, lần chết tiếp → restart
+		reviveUsed: false,
+		setReviveUsed: (value) => set({ reviveUsed: value }),
+
 		isGameplayActive: false,
 		setIsGameplayActive: (state) => set(() => ({ isGameplayActive: state })),
 
@@ -258,6 +262,7 @@ const useGameStore = create(
 			const state = get();
 			set((prevState) => ({
 				deaths: prevState.deaths + 1,
+				reviveUsed: false, // Reset hồi sinh khi restart hoàn toàn
 				playerPositionRoom: null,
 				resetFootstepSound: true,
 				cameraShakingWhenLookingAtMonster: false,

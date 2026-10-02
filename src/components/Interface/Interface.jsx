@@ -477,10 +477,10 @@ export default function Interface() {
 	const chaseEndingActive = useGame((state) => state.chaseEndingActive);
 	const setChaseEndingActive = useGame((state) => state.setChaseEndingActive);
 
-	/* Show story dialogue once, right after the camera intro finishes */
-	const [showIntroDialogue, setShowIntroDialogue] = useState(false);
-	const introHasEndedRef  = useRef(false); // fire only once
-	const introHasStartedRef = useRef(false); // track that intro actually began
+	/* Story intro dialogue disabled */
+	// const [showIntroDialogue, setShowIntroDialogue] = useState(false);
+	const introHasEndedRef  = useRef(false);
+	const introHasStartedRef = useRef(false);
 
 	const setIsListening = useGame((state) => state.setIsListening);
 	const setCursor = useInterface((state) => state.setCursor);
@@ -516,19 +516,12 @@ export default function Interface() {
 	const prevDoneObjectives = useRef(0);
 
 	useEffect(() => {
-		if (loading) return; // still on loading screen
-
-		// Step 1: mark that the intro camera animation has started
+		if (loading) return;
 		if (introIsPlaying) {
 			introHasStartedRef.current = true;
 			return;
 		}
-
-		// Step 2: intro finished — show dialogue once, after 2s
-		if (introHasStartedRef.current && !introHasEndedRef.current) {
-			introHasEndedRef.current = true;
-			setTimeout(() => setShowIntroDialogue(true), 2000);
-		}
+		// Story intro dialogue disabled
 	}, [loading, introIsPlaying]);
 
 	useEffect(() => {
@@ -1107,9 +1100,8 @@ export default function Interface() {
 
 			<EndGameScreen />
 
-			{showIntroDialogue && (
-				<IntroDialogue onFinish={() => setShowIntroDialogue(false)} />
-			)}
+			{/* Story IntroDialogue disabled */}
+
 
 			{showEndDialogue && (
 				<EndDialogue

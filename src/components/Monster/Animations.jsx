@@ -381,10 +381,12 @@ export default function Animations({ group, animations }) {
 			const attackAction = actions['Attack'];
 
 			const onAttackFinished = () => {
+				// Quai vat khong lao len can: chi reset ve idle, mo death screen qua logic rieng
 				setOpenDeathScreen(true);
 				resetAnimations(actions);
 				setTimeout(() => {
-					resetGame();
+					// Reset monster ve trang thai an, khong reset toan bo game
+					useMonster.getState().restart();
 				}, 100);
 			};
 

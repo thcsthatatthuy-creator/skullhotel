@@ -14,6 +14,7 @@
 		"build:firebase": "vite build",
 		"build:steam": "npm run build:electron && electron electron/main.js",
 		"build:steam-dist": "npm run build:electron && electron-builder --config.appId=3739730 --win nsis",
+		"build:installer": "npm run build:electron && electron-builder --win nsis",
 		"preview": "vite preview",
 		"fix-paths": "node fix-paths.js",
 		"electron": "electron ."
@@ -50,7 +51,7 @@
 		"vite": "^6.4.1"
 	},
 	"build": {
-		"appId": "3739730",
+		"appId": "com.skullhotel.app",
 		"productName": "Skull Hotel",
 		"files": [
 			"build/**/*",
@@ -70,12 +71,16 @@
 		"win": {
 			"target": "nsis",
 			"icon": "public/images/web-app-manifest-512x512.png",
-			"requestedExecutionLevel": "asInvoker"
+			"requestedExecutionLevel": "asInvoker",
+			"artifactName": "${productName}_Setup_${version}.${ext}"
 		},
 		"nsis": {
 			"oneClick": false,
 			"allowToChangeInstallationDirectory": true,
-			"createDesktopShortcut": true
+			"createDesktopShortcut": "always",
+			"createStartMenuShortcut": true,
+			"shortcutName": "Skull Hotel",
+			"uninstallDisplayName": "Skull Hotel"
 		}
 	}
 }

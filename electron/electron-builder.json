@@ -4,19 +4,29 @@
 	"directories": {
 		"output": "dist"
 	},
-	"files": ["build/**/*", "electron/**/*", "package.json"],
-	"extraResources": [{ "from": "build", "to": "app/build" }],
+	"files": [
+		"build/**/*",
+		"electron/**/*",
+		"package.json"
+	],
+	"extraResources": [
+		{
+			"from": "build",
+			"to": "app/build"
+		}
+	],
 	"win": {
 		"target": "nsis",
-		"icon": null,
+		"icon": "public/images/web-app-manifest-512x512.png",
 		"requestedExecutionLevel": "asInvoker",
-		"applicationManifest": "electron/app.manifest"
+		"artifactName": "${productName}_Setup_${version}.${ext}"
 	},
 	"nsis": {
 		"oneClick": false,
 		"allowToChangeInstallationDirectory": true,
-		"createDesktopShortcut": true,
+		"createDesktopShortcut": "always",
 		"createStartMenuShortcut": true,
-		"shortcutName": "Skull Hotel"
+		"shortcutName": "Skull Hotel",
+		"uninstallDisplayName": "Skull Hotel"
 	}
 }

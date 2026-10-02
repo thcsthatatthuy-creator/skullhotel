@@ -25,10 +25,14 @@ if (isCompatGL) {
 	app.commandLine.appendSwitch('use-angle', 'd3d11');
 }
 
+// Always enable GPU acceleration flags to prevent WebGL not supported errors on production builds
+app.commandLine.appendSwitch('ignore-gpu-blocklist');
+app.commandLine.appendSwitch('enable-gpu-rasterization');
+app.commandLine.appendSwitch('enable-zero-copy');
+app.commandLine.appendSwitch('enable-webgl');
+
 if (!app.isPackaged) {
-	app.commandLine.appendSwitch('ignore-gpu-blocklist');
-	app.commandLine.appendSwitch('enable-gpu-rasterization');
-	app.commandLine.appendSwitch('enable-zero-copy');
+	// Any dev-only flags can go here if needed in the future
 }
 
 app.commandLine.appendSwitch('no-sandbox');
